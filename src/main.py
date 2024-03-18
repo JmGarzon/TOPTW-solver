@@ -128,13 +128,6 @@ if __name__ == "__main__":
         print()
         T = compute_distance_matrix(instance["points"])
 
-        id1 = 3
-        id2 = 40
-        point1 = tuple(instance["points"].iloc[id1][["x", "y"]].values)
-        point2 = tuple(instance["points"].iloc[id2][["x", "y"]].values)
-        distance = euclidean_distance(point1, point2)
-        print("Euclidean distance between", point1, "and", point2, ":", distance)
-        print(f"Comparing to the vectorized result: {T[id1,id2]}")
 
         break
         count += 1
