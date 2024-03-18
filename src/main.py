@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 
-INSTANCES_PATH = "instances\pr01_10"
+INSTANCES_PATH = r"instances\pr01_10"
 
 
 def read_instances(folder_path):
@@ -91,28 +91,58 @@ def read_instances(folder_path):
     return instances
 
 
-def compute_distance_matrix(df):
-    """
-    Compute the distance matrix between points in a dataset efficiently using vectorized operations.
+class TOPTWSolver:
+    def __init__(self, instance):
+        self.node_count = instance.get("N")
+        self.filename = instance.get("filename")
+        self.points_df = instance.get("points")
+        if self.points_df.shape[0] > 1:
+            self.Tmin = self.points_df.iloc[0]["opening_time"]
+            self.Tmax = self.points_df.iloc[0]["closing_time"]
+            self.distance_matrix = (
+                self.compute_distance_matrix()
+            )  # Compute distance matrix upon initialization
+            self.upper_bound = (
+                self.compute_upper_bound()
+            )  # Compute upper bound upon initialization
+        else:
+            raise ValueError("No points added to the instance")
 
-    Parameters:
-    - df: DataFrame containing the points with coordinates x and y.
+    def compute_distance_matrix(self):
+        """
+        Compute the distance matrix between points in a dataset efficiently using vectorized operations.
 
-    Returns:
-    - dist_matrix: Distance matrix where dist_matrix[i, j] represents the Euclidean distance between point i and point j.
-    """
-    nodes = df[["x", "y"]].values
+        Returns:
+        - dist_matrix: Distance matrix where dist_matrix[i, j] represents the Euclidean distance between point i and point j.
+        """
+        nodes = self.points_df[["x", "y"]].values
 
-    # Compute the pairwise differences between all points
-    diff = nodes[:, np.newaxis, :] - nodes[np.newaxis, :, :]
+        # Compute the pairwise differences between all points
+        diff = nodes[:, np.newaxis, :] - nodes[np.newaxis, :, :]
 
-    # Compute the squared distances
-    sq_distances = np.sum(diff**2, axis=2)
+        # Compute the squared distances
+        sq_distances = np.sum(diff**2, axis=2)
 
-    # Compute the distance matrix by taking the square root of the squared distances
-    dist_matrix = np.sqrt(sq_distances)
+        # Compute the distance matrix by taking the square root of the squared distances
+        dist_matrix = np.sqrt(sq_distances)
 
-    return dist_matrix
+        return dist_matrix
+
+    def compute_upper_bound(self):
+        """
+        Compute the upper bound of revenue by summing profits of the locations within time windows.
+
+        Returns:
+        - upper_bound: The upper bound of revenue.
+        """
+        # Check which points can be visited within their time windows
+        within_time_windows = (self.points_df["opening_time"] <= self.Tmax) & (
+            self.Tmin < self.points_df["closing_time"]
+        )
+        # Compute upper bound of revenue by summing profits of the locations within time windows
+        upper_bound = self.points_df.loc[within_time_windows, "profit"].sum()
+
+        return upper_bound
 
 
 if __name__ == "__main__":
@@ -120,14 +150,13 @@ if __name__ == "__main__":
     np.set_printoptions(precision=2, suppress=True)
     count = 1
     for instance in instances:
-
-        print("Filename:", instance["filename"])
-
-        print("Points DataFrame:")
-        print(instance["points"])
-        print()
-        T = compute_distance_matrix(instance["points"])
-
+        solver = TOPTWSolver(instance)
+        print("Filename:", solver.filename)
+        print(f"Nodes: {solver.node_count}")
+        print(f"Points received: {solver.points_df.shape[0]}")
+        print(f"T min: {solver.Tmin}")
+        print(f"T max: {solver.Tmax}")
+        print(f"Upper bound: {solver.upper_bound}")
 
         break
         count += 1
