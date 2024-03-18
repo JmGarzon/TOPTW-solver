@@ -3,3 +3,6 @@ __pycache__/
 
 # Ignore pytest cache directory
 .pytest_cache/
+
+# Ignore local environment
+.venv/
