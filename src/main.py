@@ -99,6 +99,8 @@ def read_instances(folder_path):
 class Solutions:
     def __init__(
         self,
+        nodes_count,
+        T_max,
         criteria,
         paths_count,
         solutions_count,
@@ -112,6 +114,8 @@ class Solutions:
 
         Parameters:
         - criteria: The criteria function used in the constructive method.
+        - nodes_count: The total number of nodes in the problem instance.
+        - T_max: The maximum time limit for the solution.
         - paths_count: Number of paths used in the constructive method.
         - solutions_count: Number of solutions generated.
         - enable_random_noise: Whether random noise was enabled in the constructive method.
@@ -120,6 +124,8 @@ class Solutions:
         - instance_name: Name of the problem instance.
         """
         self.criteria = criteria
+        self.nodes_count = nodes_count
+        self.T_max = T_max
         self.paths_count = paths_count
         self.solutions_count = solutions_count
         self.enable_random_noise = enable_random_noise
@@ -151,6 +157,8 @@ class Solutions:
         """
         data = {
             "instance_name": self.instance_name,
+            "nodes_count": self.nodes_count,
+            "T_max": self.T_max,
             "criteria_function": self.criteria.__name__,
             "paths_count": self.paths_count,
             "solutions_count": self.solutions_count,
@@ -472,6 +480,8 @@ class TOPTWSolver:
 
         solutions_df = pd.DataFrame(solutions_data)
         solutions = Solutions(
+            self.nodes_count,
+            self.Tmax,
             criteria,
             paths_count,
             solutions_count,
@@ -489,9 +499,9 @@ if __name__ == "__main__":
     count = 0
     for instance in instances:
         solver = TOPTWSolver(instance)
-        print("Processing:", solver.filename)
+        print(f"\nProcessing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}")
         comparison_parameters = {
-            "solutions_count": 10,
+            "solutions_count": 30,
             "random_noise_flag": True,
             "path_count_list": [1, 2, 3, 4],
             "criteria_list": [solver.simple_revenue, solver.savings_profit_method],
@@ -510,7 +520,6 @@ if __name__ == "__main__":
                 solutions.to_tsv(RESULTS_PATH)
                 aggregated_solutions_data.append(solutions.to_dict())
         count += 1
-        break
 
     print("Total instances: ", count)
     print("\n\n ----------------------------------------\n")
