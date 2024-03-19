@@ -2,8 +2,11 @@ import os
 import pandas as pd
 import numpy as np
 import time
+import random
+import pprint
 
 INSTANCES_PATH = r"instances\pr01_10"
+NOISE_SIGNAL_RATIO = 0.1
 
 
 def read_instances(folder_path):
@@ -98,8 +101,6 @@ class TOPTWSolver:
         self.filename = instance.get("filename")
         self.points_df = instance.get("points")
         if self.points_df.shape[0] > 1:
-            self.points_df["path"] = None
-            self.points_df.loc[0, "path"] = "all"
             self.Tmin = self.points_df.iloc[0]["opening_time"]
             self.Tmax = self.points_df.iloc[0]["closing_time"]
             self.distance_matrix = (
@@ -147,109 +148,153 @@ class TOPTWSolver:
 
         return upper_bound
 
-    def feasible_path(self, S, new_node_index, path_index, insertion_position):
-        is_feasible = False
-        valid_time_window = False
+    def feasible_path(self, current_path, new_node_index, insertion_position):
+        """
+        Check if inserting a new node into the current path at the specified position maintains feasibility.
+
+        Parameters:
+        - current_path: The current path to which the new node will be inserted.
+        - new_node_index: The index of the new node to be inserted.
+        - insertion_position: The position in the current path where the new node will be inserted.
+
+        Returns:
+        - is_feasible: A boolean indicating whether the insertion is feasible.
+        """
         path_time = self.Tmin  # Initialize current time with Tmin
 
-        # Insert the new node into the path at the specified position
-        path = S[path_index].copy()
-        path.insert(insertion_position, new_node_index)
+        # Create a new path with the new node inserted at the specified position
+        new_path = (
+            current_path[:insertion_position]
+            + [new_node_index]
+            + current_path[insertion_position:]
+        )
 
-        # Calculate the total time considering travel and service durations
-        for i in range(len(path) - 1):
-            current_node_index = path[i]
-            next_node_index = path[i + 1]
-            print(f"\nNode: {current_node_index} To: {next_node_index}:")
-            # Access distance matrix and duration information
+        # Check time window feasibility
+        for i in range(len(new_path) - 1):
+            current_node_index = new_path[i]
+            next_node_index = new_path[i + 1]
+
+            # Retrieve distance and duration information
             t_ij = self.distance_matrix[current_node_index][next_node_index]
-            print(f"Traveling time: {t_ij}")
             duration = self.points_df.loc[current_node_index, "duration"]
-            print(f"Service time: {duration}")
 
             # Update current time
             path_time += duration + t_ij
-            print(f"Path time: {path_time}")
+
+            # Check if the new path violates time windows
             next_node_opening_time = self.points_df.loc[next_node_index, "opening_time"]
             next_node_closing_time = self.points_df.loc[next_node_index, "closing_time"]
-            print(f"Closing time: {next_node_closing_time}")
-            print(f"Openning time: {next_node_opening_time}")
-            if path_time < next_node_closing_time:
-                print("Valid TW")
-                valid_time_window = True
-                if path_time <= next_node_opening_time:
-                    opening_time_difference = next_node_opening_time - path_time
-                    path_time += opening_time_difference
-            else:
-                valid_time_window = False
-                break
+
+            if path_time > next_node_closing_time:
+                return False  # Exceeds closing time, not feasible
+
+            if path_time < next_node_opening_time:
+                # Wait until opening time if necessary
+                path_time = next_node_opening_time
 
         # Check if the total time does not exceed Tmax
-        if path_time <= self.Tmax and valid_time_window:
-            print("Feasible")
-            is_feasible = True
+        if path_time > self.Tmax:
+            return False  # Exceeds Tmax, not feasible
 
-        return is_feasible, path_time
+        return True  # Feasible
 
-    def profit_density(
-        self, S, new_node_index, path_index, insertion_position, path_time
+    def simple_revenue(
+        self, path, new_node_index, insertion_position, enable_random_noise
     ):
-        # Insert the new node into the path at the specified position
-        path = S[path_index].copy()
-        path.insert(insertion_position, new_node_index)
-        profit_sum = self.points_df.loc[path, "profit"].sum()
-        profit_density = profit_sum / path_time
-        return profit_density
+        """
+        Calculate the simple revenue metric for inserting a new node into a path.
 
-    def constructive_method(self, criteria, paths_count=1, solutions_count=10):
-        start_end = [0, 0]
-        S = [start_end[:] for _ in range(paths_count)]
-        stop = False
-        while stop == False:
-            stop = True
-            best_criteria = 0
-            for index, row in self.points_df.iterrows():
-                if pd.isnull(row["path"]):
-                    for path in range(paths_count):
-                        # print(f"Path: {path}")
-                        for pos in range(1, len(S[path])):
-                            # print(f"Pos: {pos}")
-                            is_feasible, path_time = self.feasible_path(
-                                S, index, path, pos
-                            )
-                            if is_feasible:
-                                path_criteria = criteria(S, index, path, pos, path_time)
-                                print(
-                                    f"Feasible: {is_feasible} , Criteria: {path_criteria}"
-                                )
-                                if path_criteria > best_criteria:
-                                    best_criteria = path_criteria
-                                    best_insertion = {
-                                        "index": index,
-                                        "path": path,
-                                        "position": pos,
-                                        "time": path_time,
-                                    }
-                                    stop = False  # Found another solution, let's try to find a better one
-            if stop == False:
-                S[best_insertion["path"]].insert(
-                    best_insertion["position"], best_insertion["index"]
-                )
-                # print(S)
-                # print(best_insertion["time"])
-                self.points_df.loc[best_insertion["index"], "path"] = best_insertion[
-                    "path"
-                ]
+        Parameters:
+        - path: The current path to which the new node will be inserted.
+        - new_node_index: The index of the new node to be inserted.
+        - insertion_position: The position in the current path where the new node will be inserted.
+        - enable_random_noise: Whether to enable random noise in the revenue calculation.
 
-        solution = {
-            "paths": S,
-            "profit": sum(
+        Returns:
+        - revenue: The simple revenue metric for the insertion.
+        """
+        previous_node = path[insertion_position - 1]
+        cost = self.distance_matrix[previous_node][new_node_index]
+
+        if cost <= 0:
+            return 0  # Avoid division by zero or negative cost
+
+        profit = self.points_df.loc[new_node_index, "profit"]
+
+        noise = 0
+        if enable_random_noise:
+            noise_abs_span = self.points_df["profit"].mean() * NOISE_SIGNAL_RATIO
+            noise = random.random() * noise_abs_span
+
+        revenue = (profit + noise) / cost
+        return revenue
+
+    def constructive_method(
+        self, criteria, paths_count=1, solutions_count=10, enable_random_noise=True
+    ):
+        """
+        Construct initial solutions for the TOPTW problem using a constructive heuristic.
+
+        Parameters:
+        - criteria: A function to evaluate the insertion criteria for a node into a path.
+        - paths_count: Number of paths to construct.
+        - solutions_count: Maximum number of solutions to generate.
+
+        Returns:
+        - solutions: List of dictionaries containing the constructed paths and their profit.
+        """
+        solutions = []
+
+        for _ in range(solutions_count):
+            self.points_df["path"] = None
+            self.points_df.loc[0, "path"] = "all"
+            start_time = time.time()  # Start timing
+            start_end = [0, 0]
+            paths = [start_end[:] for _ in range(paths_count)]
+            stop = False
+
+            while not stop:
+                stop = True
+                best_criteria = 0
+                for node_idx, row in self.points_df.iterrows():
+                    if pd.isnull(row["path"]):
+                        for path_idx in range(paths_count):
+                            path = paths[path_idx]
+                            for pos in range(1, len(paths[path_idx])):
+                                is_feasible = self.feasible_path(path, node_idx, pos)
+                                if is_feasible:
+                                    path_criteria = criteria(
+                                        path, node_idx, pos, enable_random_noise
+                                    )
+                                    if path_criteria > best_criteria:
+                                        best_criteria = path_criteria
+                                        best_insertion = {
+                                            "index": node_idx,
+                                            "path": path_idx,
+                                            "position": pos,
+                                        }
+                                        stop = False  # Found another solution, let's try to find a better one
+                if not stop:
+                    paths[best_insertion["path"]].insert(
+                        best_insertion["position"], best_insertion["index"]
+                    )
+                    self.points_df.loc[best_insertion["index"], "path"] = (
+                        best_insertion["path"]
+                    )
+                    print(paths)
+
+            profit = sum(
                 self.points_df.loc[index, "profit"]
-                for sublist in S
+                for sublist in paths
                 for index in sublist
-            ),
-        }
-        return solution
+            )
+            end_time = time.time()  # End timing
+            elapsed_time = end_time - start_time  # Calculate elapsed time
+
+            solution = {"paths": paths, "profit": profit, "time": elapsed_time}
+            solutions.append(solution)
+
+        return solutions
 
 
 if __name__ == "__main__":
@@ -266,7 +311,9 @@ if __name__ == "__main__":
         print(f"Sample:\n {solver.points_df.head(2)}\n")
         print(f"T min: {solver.Tmin}\tT max: {solver.Tmax}")
         print(f"Upper bound: {solver.upper_bound}")
-        solution = solver.constructive_method(solver.profit_density, 2)
-        print("Profit: ", solution["profit"])
+        solutions = solver.constructive_method(solver.simple_revenue, 2, 1)
+        print("Solutions")
+        pprint.pprint(solutions)
         count += 1
+        exit()
     print("Total instances: ", count)

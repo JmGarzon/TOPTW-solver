@@ -61,7 +61,13 @@ def test_read_instances():
 
 def test_feasible_rute(sample_instance):
     solver = TOPTWSolver(sample_instance)
-    solution = solver.constructive_method(solver.profit_density, 2)
+    solutions = solver.constructive_method(
+        solver.simple_revenue,
+        paths_count=2,
+        solutions_count=1,
+        enable_random_noise=False,
+    )
+    solution = solutions[0]
     assert solution["paths"][0] == [0, 1, 0]
     assert solution["paths"][1] == [0, 0]
     assert solution["profit"] == 20
