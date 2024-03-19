@@ -1,0 +1,3 @@
+instance_name	criteria_function	paths_count	solutions_count	enable_random_noise	average_gap	minimum_gap	maximum_gap	average_execution_time	minimum_execution_time	maximum_execution_time
+pr01	simple_revenue	1	10	True	66.34703196347033	59.96955859969558	69.25418569254185	0.5712393760681153	0.4726693630218506	0.7873373031616211
+pr01	simple_revenue	2	10	True	42.69406392694064	37.74733637747336	48.09741248097412	1.2109307527542115	1.0509226322174072	1.3535306453704834

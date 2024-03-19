@@ -3,9 +3,10 @@ import pandas as pd
 import numpy as np
 import time
 import random
-import pprint
+import json
 
 INSTANCES_PATH = r"instances\pr01_10"
+RESULTS_PATH = r".\results"
 NOISE_SIGNAL_RATIO = 0.1
 
 
@@ -93,6 +94,105 @@ def read_instances(folder_path):
 
             instances.append(instance_data)
     return instances
+
+
+class Solutions:
+    def __init__(
+        self,
+        criteria,
+        paths_count,
+        solutions_count,
+        enable_random_noise,
+        optimal_score,
+        solutions_df,
+        instance_name,
+    ):
+        """
+        Initialize a Solutions object.
+
+        Parameters:
+        - criteria: The criteria function used in the constructive method.
+        - paths_count: Number of paths used in the constructive method.
+        - solutions_count: Number of solutions generated.
+        - enable_random_noise: Whether random noise was enabled in the constructive method.
+        - optimal_score: The optimal score for the problem instance.
+        - solutions_df: DataFrame containing the constructed solutions.
+        - instance_name: Name of the problem instance.
+        """
+        self.criteria = criteria
+        self.paths_count = paths_count
+        self.solutions_count = solutions_count
+        self.enable_random_noise = enable_random_noise
+        self.instance_name = os.path.splitext(instance_name)[0]
+        self.solutions_df = solutions_df
+        self.compute_stats()
+
+    def compute_stats(self):
+        """
+        Compute statistics for GAP and execution time.
+        """
+        if "gap" in self.solutions_df.columns:
+            self.avg_gap = np.mean(self.solutions_df["gap"])
+            self.min_gap = np.min(self.solutions_df["gap"])
+            self.max_gap = np.max(self.solutions_df["gap"])
+        else:
+            raise ValueError("DataFrame does not contain 'gap' column.")
+
+        if "execution_time" in self.solutions_df.columns:
+            self.avg_time = np.mean(self.solutions_df["execution_time"])
+            self.min_time = np.min(self.solutions_df["execution_time"])
+            self.max_time = np.max(self.solutions_df["execution_time"])
+        else:
+            raise ValueError("DataFrame does not contain 'execution_time' column.")
+
+    def to_dict(self):
+        """
+        Return a dictionary representation of the Solutions object.
+        """
+        data = {
+            "instance_name": self.instance_name,
+            "criteria_function": self.criteria.__name__,
+            "paths_count": self.paths_count,
+            "solutions_count": self.solutions_count,
+            "enable_random_noise": self.enable_random_noise,
+            "average_gap": self.avg_gap,
+            "minimum_gap": self.min_gap,
+            "maximum_gap": self.max_gap,
+            "average_execution_time": self.avg_time,
+            "minimum_execution_time": self.min_time,
+            "maximum_execution_time": self.max_time,
+        }
+        return data
+
+    def to_tsv(self, folder_path):
+        """
+        Save solutions DataFrame to a TSV file.
+
+        Parameters:
+        - folder_path: Path to the folder where the TSV file will be saved.
+        """
+        # Create folder if it doesn't exist
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+
+        # Check if naming convention file exists, and create it if it doesn't
+        naming_convention_file = os.path.join(folder_path, "naming_convention.txt")
+        if not os.path.exists(naming_convention_file):
+            naming_explanation = (
+                "File naming convention:\n"
+                "<InstanceName>_c<CriteriaFunction>_p<PathsCount>_m<SolutionsCount>_r<RandomNoise>.tsv\n"
+                "Example: pr01_simple_revenue_2_10_True.tsv"
+            )
+            with open(naming_convention_file, "w") as f:
+                f.write(naming_explanation)
+
+        # Generate file name based on instance name and solver parameters
+        file_name = f"{self.instance_name}_c{self.criteria.__name__}_p{self.paths_count}_m{self.solutions_count}_r{self.enable_random_noise}.tsv"
+        file_path = os.path.join(folder_path, file_name)
+
+        # Save DataFrame to TSV
+        self.solutions_df.to_csv(file_path, sep="\t", index=False)
+        print(f"\t - TSV file saved at: {file_path}")
 
 
 class TOPTWSolver:
@@ -239,11 +339,12 @@ class TOPTWSolver:
         - criteria: A function to evaluate the insertion criteria for a node into a path.
         - paths_count: Number of paths to construct.
         - solutions_count: Maximum number of solutions to generate.
+        - enable_random_noise: Whether to enable random noise in the criteria calculation.
 
         Returns:
-        - solutions: List of dictionaries containing the constructed paths and their profit.
+        - solutions: A Solutions object containing the constructed solutions and solver parameters.
         """
-        solutions = []
+        solutions_data = []
 
         for _ in range(solutions_count):
             self.points_df["path"] = None
@@ -281,7 +382,6 @@ class TOPTWSolver:
                     self.points_df.loc[best_insertion["index"], "path"] = (
                         best_insertion["path"]
                     )
-                    print(paths)
 
             profit = sum(
                 self.points_df.loc[index, "profit"]
@@ -291,29 +391,64 @@ class TOPTWSolver:
             end_time = time.time()  # End timing
             elapsed_time = end_time - start_time  # Calculate elapsed time
 
-            solution = {"paths": paths, "profit": profit, "time": elapsed_time}
-            solutions.append(solution)
+            gap = ((self.upper_bound - profit) / self.upper_bound) * 100  # Compute GAP
 
+            solution_data = {
+                "paths": paths,
+                "score": profit,
+                "execution_time": elapsed_time,
+                "gap": gap,
+            }
+            solutions_data.append(solution_data)
+
+        solutions_df = pd.DataFrame(solutions_data)
+        solutions = Solutions(
+            criteria,
+            paths_count,
+            solutions_count,
+            enable_random_noise,
+            self.upper_bound,
+            solutions_df,
+            self.filename,
+        )
         return solutions
 
 
 if __name__ == "__main__":
     instances = read_instances(INSTANCES_PATH)
-    np.set_printoptions(precision=2, suppress=True)
-    count = 1
+    aggregated_solutions_data = []
+    count = 0
     for instance in instances:
         solver = TOPTWSolver(instance)
-
-        print("Filename:", solver.filename)
-        print(
-            f"Nodes: {solver.nodes_count}\t Points received: {solver.points_df.shape[0]}"
-        )
-        print(f"Sample:\n {solver.points_df.head(2)}\n")
-        print(f"T min: {solver.Tmin}\tT max: {solver.Tmax}")
-        print(f"Upper bound: {solver.upper_bound}")
-        solutions = solver.constructive_method(solver.simple_revenue, 2, 1)
-        print("Solutions")
-        pprint.pprint(solutions)
+        print("Processing:", solver.filename)
+        comparison_parameters = {
+            "solutions_count": 10,
+            "random_noise_flag": True,
+            "path_count_list": [1, 2],
+            "criteria_list": [solver.simple_revenue],
+        }
+        for path_count in comparison_parameters["path_count_list"]:
+            for criteria in comparison_parameters["criteria_list"]:
+                print(
+                    f"* Parameters: solutions_count={comparison_parameters['solutions_count']}, path_count={path_count}, criteria={criteria.__name__}, random_noise={comparison_parameters['random_noise_flag']}"
+                )
+                solutions = solver.constructive_method(
+                    criteria,
+                    path_count,
+                    comparison_parameters["solutions_count"],
+                    comparison_parameters["random_noise_flag"],
+                )
+                solutions.to_tsv(RESULTS_PATH)
+                aggregated_solutions_data.append(solutions.to_dict())
         count += 1
-        exit()
+        break
+
     print("Total instances: ", count)
+    print("\n\n ----------------------------------------\n")
+    print("Agregated Solutions:")
+    aggregated_solutions = pd.DataFrame.from_records(aggregated_solutions_data)
+    aggregated_solutions_path = os.path.join(RESULTS_PATH, "aggregated_solutions.tsv")
+    aggregated_solutions.to_csv(aggregated_solutions_path, sep="\t", index=False)
+
+    print(aggregated_solutions)
+    print(f"\t - TSV file saved at: {aggregated_solutions_path}")
