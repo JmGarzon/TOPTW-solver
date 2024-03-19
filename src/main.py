@@ -329,6 +329,75 @@ class TOPTWSolver:
         revenue = (profit + noise) / cost
         return revenue
 
+    def savings_profit_method(
+        self, path, new_node_index, insertion_position, enable_random_noise
+    ):
+        """
+        Calculate the savings-profit metric for inserting a new node into a path using the savings method.
+
+        The savings-profit method calculates the potential savings achieved by inserting a new node between two existing nodes in a path. It considers the reduction in distance between the previous and next nodes when bypassing the new node, weighted by the profit ratio.
+
+        Parameters:
+        - path (list): The current path to which the new node will be inserted.
+        - new_node_index (int): The index of the new node to be inserted.
+        - insertion_position (int): The position in the current path where the new node will be inserted.
+        - enable_random_noise (bool): Whether to enable random noise in the savings calculation.
+
+        Returns:
+        - savings (float): The savings-profit metric for the insertion, considering both distance reduction and profit information.
+
+        The savings-profit metric is calculated as follows:
+            savings = (distance(prev_node, new_node) + distance(new_node, next_node)) - distance(prev_node, next_node)
+            * profit_ratio
+
+        Where:
+            - distance(prev_node, new_node) is the distance between the previous node and the new node,
+            - distance(new_node, next_node) is the distance between the new node and the next node,
+            - distance(prev_node, next_node) is the distance between the previous node and the next node,
+            - profit_ratio is the ratio of profit to the sum of distances from the previous node to the new node and from the new node to the next node.
+
+        If random noise is enabled, it adds a small random value to the savings to introduce variability.
+
+        Note:
+        - This method aims to balance the trade-off between increasing profit and decreasing distance when inserting a new node.
+        """
+        previous_node = path[insertion_position - 1]
+        next_node = path[insertion_position]
+
+        # Calculate the distance between the previous node and the new node
+        prev_node_to_new_node_time = self.distance_matrix[previous_node][new_node_index]
+
+        # Calculate the distance between the new node and the next node
+        new_node_to_next_node_time = self.distance_matrix[new_node_index][next_node]
+
+        # Calculate the distance between the previous node and the next node
+        prev_node_to_next_node_time = self.distance_matrix[previous_node][next_node]
+
+        # Calculate the savings obtained by inserting the new node
+        savings = (
+            prev_node_to_new_node_time
+            + new_node_to_next_node_time
+            - prev_node_to_next_node_time
+        )
+
+        # Add random noise if enabled
+        if enable_random_noise:
+            noise_abs_span = (
+                (self.distance_matrix.max() - self.distance_matrix.min())
+                * NOISE_SIGNAL_RATIO
+                / 2
+            )
+            noise = random.random() * noise_abs_span
+            savings += noise
+
+        # Add profit information to the savings calculation
+        profit_ratio = self.points_df.loc[new_node_index, "profit"] / (
+            prev_node_to_new_node_time + new_node_to_next_node_time
+        )
+        savings *= profit_ratio
+
+        return savings
+
     def constructive_method(
         self, criteria, paths_count=1, solutions_count=10, enable_random_noise=True
     ):
@@ -424,8 +493,8 @@ if __name__ == "__main__":
         comparison_parameters = {
             "solutions_count": 10,
             "random_noise_flag": True,
-            "path_count_list": [1, 2],
-            "criteria_list": [solver.simple_revenue],
+            "path_count_list": [1, 2, 3, 4],
+            "criteria_list": [solver.simple_revenue, solver.savings_profit_method],
         }
         for path_count in comparison_parameters["path_count_list"]:
             for criteria in comparison_parameters["criteria_list"]:
