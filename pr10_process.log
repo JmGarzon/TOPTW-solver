@@ -1,0 +1,201 @@
+
+Processing: pr01.txt - N: 48 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr01_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr01_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr01_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr01_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr01_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr01_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr01_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr01_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr02.txt - N: 96 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr02_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr02_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr02_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr02_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr02_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr02_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr02_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr02_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr03.txt - N: 144 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr03_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr03_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr03_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr03_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr03_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr03_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr03_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr03_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr04.txt - N: 192 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr04_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr04_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr04_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr04_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr04_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr04_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr04_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr04_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr05.txt - N: 240 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr05_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr05_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr05_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr05_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr05_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr05_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr05_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr05_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr06.txt - N: 288 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr06_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr06_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr06_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr06_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr06_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr06_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr06_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr06_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr07.txt - N: 72 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr07_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr07_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr07_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr07_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr07_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr07_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr07_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr07_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr08.txt - N: 144 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr08_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr08_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr08_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr08_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr08_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr08_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr08_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr08_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr09.txt - N: 216 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr09_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr09_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr09_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr09_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr09_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr09_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr09_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr09_csavings_profit_method_p4_m30_rTrue.tsv
+
+Processing: pr10.txt - N: 288 - T_max: 1000.0
+* Parameters: solutions_count=30, path_count=1, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr10_csimple_revenue_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=1, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr10_csavings_profit_method_p1_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr10_csimple_revenue_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=2, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr10_csavings_profit_method_p2_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr10_csimple_revenue_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=3, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr10_csavings_profit_method_p3_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=simple_revenue, random_noise=True
+         - TSV file saved at: .\results\pr10_csimple_revenue_p4_m30_rTrue.tsv
+* Parameters: solutions_count=30, path_count=4, criteria=savings_profit_method, random_noise=True
+         - TSV file saved at: .\results\pr10_csavings_profit_method_p4_m30_rTrue.tsv
+Total instances:  10
+
+
+ ----------------------------------------
+
+Agregated Solutions:
+   instance_name  nodes_count   T_max      criteria_function  paths_count  solutions_count  ...  average_gap  minimum_gap  maximum_gap  average_execution_time  minimum_execution_time  maximum_execution_time
+0           pr01           48  1000.0         simple_revenue            1               30  ...    65.702689    59.056317    69.254186                0.620723                0.482100                0.890056  
+1           pr01           48  1000.0  savings_profit_method            1               30  ...    73.505835    66.818874    78.995434                0.192440                0.113700                0.279538  
+2           pr01           48  1000.0         simple_revenue            2               30  ...    40.700152    34.550989    50.076104                1.306724                1.014365                1.514162  
+3           pr01           48  1000.0  savings_profit_method            2               30  ...    56.763064    49.771689    59.969559                0.429332                0.311163                0.571524  
+4           pr01           48  1000.0         simple_revenue            3               30  ...    26.341958    19.939117    32.420091                1.620731                1.414897                1.896152  
+..           ...          ...     ...                    ...          ...              ...  ...          ...          ...          ...                     ...                     ...                     ...  
+75          pr10          288  1000.0  savings_profit_method            2               30  ...    87.460606    85.298701    89.610390                7.492256                4.578799               10.323474  
+76          pr10          288  1000.0         simple_revenue            3               30  ...    70.739394    69.246753    72.337662               80.367849               71.374705               95.748826  
+77          pr10          288  1000.0  savings_profit_method            3               30  ...    82.344589    80.129870    85.844156               14.023304                7.822951               20.586627  
+78          pr10          288  1000.0         simple_revenue            4               30  ...    62.490043    60.571429    65.454545              137.064239              114.832618              155.035193  
+79          pr10          288  1000.0  savings_profit_method            4               30  ...    77.890043    74.805195    80.025974               22.765664               16.221984               30.821801  
+
+[80 rows x 13 columns]
+         - TSV file saved at: .\results\aggregated_solutions.tsv
