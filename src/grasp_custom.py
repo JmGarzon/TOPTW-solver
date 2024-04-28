@@ -5,7 +5,6 @@ import time
 import random
 import json
 
-
 INSTANCES_PATH = r"instances\pr01_10"
 RESULTS_PATH = r".\results"
 NOISE_SIGNAL_RATIO = 0.1
@@ -410,6 +409,8 @@ class TOPTWSolver:
 
 
 if __name__ == "__main__":
+    from load_instances import read_instances
+
     instances = read_instances(INSTANCES_PATH)
     aggregated_solutions_data = []
     count = 0
