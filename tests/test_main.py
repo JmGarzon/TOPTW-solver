@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 import pytest
-import os
-from src.main import read_instances, TOPTWSolver, INSTANCES_PATH
+
+from src.load_instances import read_instances
+from src.grasp_custom import TOPTWSolver, INSTANCES_PATH
 
 
 @pytest.fixture
