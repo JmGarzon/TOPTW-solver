@@ -13,11 +13,12 @@ import os
 import pandas as pd
 import numpy as np
 import time
+import logging
 
 INSTANCES_PATH = r"instances\pr01_10"
-METHOD_NAME = r"ILS"
+METHOD_NAME = r"ILS_Constructive"
 RESULTS_PATH = r".\results\\" + METHOD_NAME
-
+LOGGING_LEVEL = logging.INFO
 
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
@@ -412,7 +413,7 @@ class TOPTWSolver:
             "gap": gap,
         }
 
-        print(
+        logging.info(
             f"\t Solution # {s_idx + 1} Score: {total_profit} - GAP: {gap:.2f}% - Time: {elapsed_time:.2f}s"
         )
 
@@ -469,25 +470,32 @@ if __name__ == "__main__":
     from load_instances import read_instances
     from solutions import Solutions
 
+    # Configura el logging para guardar la información en un archivo y mostrarla en la consola
+    logging.basicConfig(
+        level=LOGGING_LEVEL,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[logging.FileHandler("logfile.log"), logging.StreamHandler()],
+    )
+    logging.info("Starting TOPTW Solver: New constructive method")
+
     instances = read_instances(INSTANCES_PATH)
     aggregated_solutions_data = []
     count = 0
     for instance in instances:
+        logging.info("\n")
         solver = TOPTWSolver(instance)
-        print(
-            f"\nProcessing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}"
+        logging.info(
+            f"Processing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}"
         )
         comparison_parameters = {
-            "solutions_count": 10,
+            "solutions_count": 1,
             "random_noise_flag": True,
-            # "path_count_list": [1, 2, 3, 4],
-            "path_count_list": [2],
-            # "criteria_list": [solver.simple_revenue, solver.savings_profit_method],
+            "path_count_list": [1, 2, 3, 4],
             "criteria_list": [solver.benefit_insertion_ratio],
         }
         for path_count in comparison_parameters["path_count_list"]:
             for criteria in comparison_parameters["criteria_list"]:
-                print(
+                logging.info(
                     f"* Parameters: solutions_count={comparison_parameters['solutions_count']}, path_count={path_count}, criteria={criteria.__name__}, random_noise={comparison_parameters['random_noise_flag']}"
                 )
                 solutions = solver.ILS(
@@ -500,12 +508,12 @@ if __name__ == "__main__":
                 aggregated_solutions_data.append(solutions.to_dict())
         count += 1
 
-    print("Total instances: ", count)
-    print("\n\n ----------------------------------------\n")
-    print("Agregated Solutions:")
+    logging.info("Total instances: ", count + 1)
+    logging.info("----------------------------------------")
+    logging.info("Agregated Solutions:")
     aggregated_solutions = pd.DataFrame.from_records(aggregated_solutions_data)
     aggregated_solutions_path = os.path.join(RESULTS_PATH, "aggregated_solutions.tsv")
     aggregated_solutions.to_csv(aggregated_solutions_path, sep="\t", index=False)
 
-    print(aggregated_solutions)
-    print(f"\t - TSV file saved at: {aggregated_solutions_path}")
+    logging.info(aggregated_solutions)
+    logging.info(f"\t - TSV file saved at: {aggregated_solutions_path}")

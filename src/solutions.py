@@ -9,6 +9,7 @@ Universidad EAFIT
 
 import os
 import numpy as np
+import logging
 
 
 class Solutions:
@@ -115,4 +116,4 @@ class Solutions:
 
         # Save DataFrame to TSV
         self.solutions_df.to_csv(file_path, sep="\t", index=False)
-        print(f"\t - TSV file saved at: {file_path}")
+        logging.info(f"\t - TSV file saved at: {file_path}")
