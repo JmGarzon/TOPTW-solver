@@ -1,3 +1,13 @@
+"""
+Made by: Jose Garzon, April 2024
+Heuristic Methods for Optimization
+Universidad EAFIT
+
+Based on the works of:
+- https://doi.org/10.1016/j.cor.2009.03.008 "Iterated local search for the team orienteering problem with time windows"
+- https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
+"""
+
 import os
 import pandas as pd
 import numpy as np
@@ -175,6 +185,18 @@ class TOPTWSolver:
         return upper_bound
 
     def initialize_paths(self, paths_count):
+        """
+        Initializes the paths for the solver.
+
+        Args:
+            paths_count (int): The number of paths to initialize.
+
+        Returns:
+            list: A list of dictionaries, where each dictionary represents a path and contains the following keys:
+                - path_index (int): The index of the path.
+                - path (DataFrame): A DataFrame representing the nodes in the path, including the depot.
+
+        """
         self.points_df["path"] = None
         self.points_df.loc[0, "path"] = "all"
         depot = {
@@ -196,6 +218,19 @@ class TOPTWSolver:
         return path_dict_list
 
     def benefit_insertion_ratio(self, feasible_insertion):
+        """
+        Calculates the benefit-to-insertion ratio for a feasible insertion.
+
+        Parameters:
+        - feasible_insertion (dict): A dictionary containing information about the feasible insertion.
+            Relevant keys:
+            - node_index (int): The index of the node to be inserted.
+            - shift (float): The time difference before and after the insertion.
+
+        Returns:
+        - ratio (float): The benefit-to-insertion ratio calculated as (profit * profit) / shift.
+
+        """
         node_index = feasible_insertion["node_index"]
 
         profit = self.points_df.loc[node_index, "profit"]
@@ -204,10 +239,34 @@ class TOPTWSolver:
         ratio = (profit * profit) / shift
         return ratio
 
-    def get_feasible(self, path_dict, new_node_idx, insertion_position):
+    def get_feasible(self, path_dict, new_node_idx, insertion_position, criteria):
         """
-        Check if inserting a new node j into the current path at the specified position maintains feasibility.
-        * i --> k to i --> j --> k
+        Check if inserting a new node into the current path at the specified position maintains feasibility.
+        (i) --> (k) to (i) --> (j) --> (k)
+
+        Args:
+            path_dict (dict): A dictionary containing the current path information.
+                - "path" (DataFrame): The current path as a DataFrame.
+                - "path_index" (int): The index of the current path.
+            new_node_idx (int): The index of the new node to be inserted.
+            insertion_position (int): The position at which the new node should be inserted.
+            criteria (function): A function that calculates the score of a feasible insertion.
+
+        Returns:
+            dict or None: A dictionary containing the information about the feasible insertion if it is possible,
+            or None if the insertion is not feasible.
+                - "path_index" (int): The index of the current path.
+                - "node_index" (int): The index of the new node.
+                - "position" (int): The position at which the new node should be inserted.
+                - "shift" (float): The shift induced by the new node.
+                - "arrival_time" (float): The arrival time at the new node.
+                - "start_time" (float): The start time at the new node.
+                - "wait" (float): The waiting time at the new node.
+                - "score" (float): The score of the feasible insertion.
+
+        Raises:
+            None
+
         """
 
         path = path_dict["path"]
@@ -249,16 +308,32 @@ class TOPTWSolver:
                     "start_time": start_j,
                     "wait": wait_j,
                 }
-                feasible_insert["score"] = self.benefit_insertion_ratio(feasible_insert)
+                feasible_insert["score"] = criteria(feasible_insert)
                 return feasible_insert
+        return None
 
-    def update_F(self, path_dict_list):
+    def update_F(self, path_dict_list, criteria):
+        """
+        Update the feasible insertion list based on the given path dictionary list.
+
+        Args:
+            path_dict_list (list): A list of path dictionaries.
+            criteria (str): The criteria used for determining the feasibility of an insertion.
+
+        Returns:
+            pandas.DataFrame: The updated feasible insertion list.
+
+        """
         feasible_insertion_list = []
         for point in self.points_df[self.points_df["path"].isna()].iterrows():
             for path_dict in path_dict_list:
                 path_size = path_dict["path"].shape[0]
-                for pos in range(1, path_size):  # Both intial and final depot are fixed
-                    feasible_insertion = self.get_feasible(path_dict, point[0], pos)
+
+                # Both initial and final depot are fixed
+                for pos in range(1, path_size):
+                    feasible_insertion = self.get_feasible(
+                        path_dict, point[0], pos, criteria
+                    )
                     if feasible_insertion:
                         feasible_insertion_list.append(feasible_insertion)
         if feasible_insertion_list:
@@ -269,6 +344,22 @@ class TOPTWSolver:
             return F
 
     def select_F(self, F):
+        """
+        Selects a solution from the given population F using the wheel roulette selection method.
+
+        Parameters:
+        - F (DataFrame): The population of solutions.
+
+        Returns:
+        - selected_F (DataFrame): The selected solution.
+
+        The wheel roulette selection method assigns a probability to each solution in the population
+        based on their score. The probability is calculated by dividing the score of each solution by
+        the sum of all scores. Then, a solution is selected randomly using these probabilities.
+
+        This method modifies the input DataFrame F by adding a 'probability' column and removes it
+        before returning the selected solution.
+        """
         sum_score = F["score"].sum()
         F["probability"] = F["score"] / sum_score
 
@@ -276,33 +367,23 @@ class TOPTWSolver:
         F.drop(columns=["probability"], inplace=True)
         return selected_F
 
-    def update_path(self, path_dict_list, selected_F):
-        selected_F = selected_F.iloc[0]
+    def update_path_times(self, path, position, shift_j):
+        """
+        Update the arrival time, wait time, start time, and max shift for the nodes in the given path after the insertion of a new node.
 
-        path_index = int(selected_F["path_index"])
-        node_index = int(selected_F["node_index"])
-        position = int(selected_F["position"])
-        shift_j = selected_F["shift"]
-        arrival_time_j = selected_F["arrival_time"]
-        start_time_j = selected_F["start_time"]
-        wait_j = selected_F["wait"]
+        Parameters:
+        - path (pandas.DataFrame): The path containing the nodes.
+        - position (int): The position in the path where the new node is inserted.
+        - shift_j (int): The shift value for the new node.
 
-        path = path_dict_list[path_index]["path"]
+        Returns:
+        - path (pandas.DataFrame): The updated path with the arrival time, wait time, start time, and max shift values updated for the nodes.
 
-        new_node = {
-            "node_index": node_index,
-            "arrival_time": arrival_time_j,
-            "start_time": start_time_j,
-            "shift": shift_j,
-            "wait": wait_j,
-        }
-        new_node = pd.DataFrame([new_node])
-
-        path = pd.concat(
-            [path.iloc[:position], new_node, path.iloc[position:]]
-        ).reset_index(drop=True)
-
-        # Based on the works of doi:10.1016/j.cor.2009.03.008
+        Note:
+        - This method is based on:
+            https://doi.org/10.1016/j.cor.2009.03.008 "Iterated local search for the team orienteering problem with time windows"
+            to facilitate the feasibility check.
+        """
 
         # Update arrival time, wait, start time and max shift for the nodes after the insertion of node j
         for index, node_k in path.iloc[position + 1 :].iterrows():
@@ -333,25 +414,138 @@ class TOPTWSolver:
             )
             path.loc[index] = node_j
 
-        path_dict_list[path_index]["path"] = path
+        return path
+
+    def update_path(self, path_dict_list, selected_F):
+        """
+        Update the path with a new node based on the selected_F DataFrame.
+
+        Args:
+            path_dict_list (list): A list of dictionaries representing the paths.
+            selected_F (DataFrame): A DataFrame containing the selected node information.
+
+        Returns:
+            list: The updated path_dict_list with the new node added to the path.
+        """
+        selected_F = selected_F.iloc[0]
+
+        path_index = int(selected_F["path_index"])
+        node_index = int(selected_F["node_index"])
+        position = int(selected_F["position"])
+        shift_j = selected_F["shift"]
+        arrival_time_j = selected_F["arrival_time"]
+        start_time_j = selected_F["start_time"]
+        wait_j = selected_F["wait"]
+
+        path = path_dict_list[path_index]["path"]
+
+        new_node = {
+            "node_index": node_index,
+            "arrival_time": arrival_time_j,
+            "start_time": start_time_j,
+            "shift": shift_j,
+            "wait": wait_j,
+        }
+        new_node = pd.DataFrame([new_node])
+
+        path = pd.concat(
+            [path.iloc[:position], new_node, path.iloc[position:]]
+        ).reset_index(drop=True)
+
+        path_dict_list[path_index]["path"] = self.update_path_times(
+            path, position, shift_j
+        )
         self.points_df.loc[node_index, "path"] = path_index
         return path_dict_list
 
     def constructive_method(self, criteria, paths_count=1, enable_random=False):
+        """
+        Constructs initial paths using a constructive method.
+
+        Args:
+            criteria (str): The criteria used for constructing the paths.
+            paths_count (int, optional): The number of paths to construct. Defaults to 1.
+            enable_random (bool, optional): Flag to enable random selection of paths. Defaults to False.
+
+        Returns:
+            list: A list of dictionaries representing the constructed paths.
+
+        Note:
+        - Based on the constructive method described in:
+          https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
+        """
         path_dict_list = self.initialize_paths(paths_count)
-        F = self.update_F(path_dict_list)
+        F = self.update_F(path_dict_list, criteria)
         while F is not None:
             if enable_random:
                 selected_F = self.select_F(F)
             else:
                 selected_F = F.head(1)
             path_dict_list = self.update_path(path_dict_list, selected_F)
-            F = self.update_F(path_dict_list)
+            F = self.update_F(path_dict_list, criteria)
         return path_dict_list
 
+    def get_solution_metrics(self, s_idx, start_time, solution_paths):
+        """
+        Compute the total revenue, elapsed time, and GAP for the current solution.
+
+        Args:
+            s_idx (int): The index of the current solution.
+            start_time (float): The start time of the solution computation.
+            solution_paths (list): A list of dictionaries representing the paths in the solution.
+
+        Returns:
+            dict: A dictionary containing the solution metrics.
+                - "paths" (list): The solution paths.
+                - "score" (float): The total revenue of the visited locations.
+                - "execution_time" (float): The elapsed time for the solution computation.
+                - "gap" (float): The GAP (percentage difference between the upper bound and total profit).
+        """
+        # Compute the elapsed time
+        end_time = time.time()  # End timing the execution
+        elapsed_time = end_time - start_time
+
+        # Compute the total revenue of the visited locations
+        total_profit = self.points_df[self.points_df["path"].notna()]["profit"].sum()
+
+        # Compute the GAP
+        gap = (
+            (self.upper_bound - total_profit) / self.upper_bound
+        ) * 100  # Compute GAP
+
+        solution_data = {
+            "paths": solution_paths,
+            "score": total_profit,
+            "execution_time": elapsed_time,
+            "gap": gap,
+        }
+
+        print(
+            f"\t Solution # {s_idx + 1} Score: {total_profit} - GAP: {gap:.2f}% - Time: {elapsed_time:.2f}s"
+        )
+
+        return solution_data
+
     def ILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
-        solutions_data = []
-        for s in range(solutions_count):
+        """
+        Implements the Iterated Local Search (ILS) algorithm for solving the TOPTW problem.
+
+        Args:
+            criteria (str): The criteria used for constructing the paths.
+            paths_count (int, optional): The number of paths to construct. Defaults to 1.
+            solutions_count (int, optional): The number of solutions to generate. Defaults to 10.
+            enable_random (bool, optional): Flag to enable random selection of paths. Defaults to False.
+
+        Returns:
+            Solutions: An object containing the generated solutions.
+
+        Note:
+        - Based on the ILS algorithm described in:
+          https://doi.org/10.1016/j.cor.2009.03.008 "Iterated local search for the team orienteering problem with time windows"
+        """
+
+        solutions_list = []
+        for s_idx in range(solutions_count):
             start_time = time.time()  # Start timing the execution
             path_dict_list = self.constructive_method(
                 criteria, paths_count, enable_random
@@ -360,31 +554,11 @@ class TOPTWSolver:
             solution_paths = []
             for path_dict in path_dict_list:
                 solution_paths.append(path_dict["path"]["node_index"].values.tolist())
-            end_time = time.time()  # End timing the execution
-
-            # Compute the total revenue of the solution of the points with path != None
-            total_profit = self.points_df[self.points_df["path"].notna()][
-                "profit"
-            ].sum()
-
-            elapsed_time = end_time - start_time  # Calculate elapsed time
-
-            gap = (
-                (self.upper_bound - total_profit) / self.upper_bound
-            ) * 100  # Compute GAP
-
-            solution_data = {
-                "paths": solution_paths,
-                "score": total_profit,
-                "execution_time": elapsed_time,
-                "gap": gap,
-            }
-            print(
-                f"\t Solution # {s} Score: {total_profit} - GAP: {gap:.2f}% - Time: {elapsed_time:.2f}s"
+            solutions_list.append(
+                self.get_solution_metrics(s_idx, start_time, solution_paths)
             )
-            solutions_data.append(solution_data)
 
-        solutions_df = pd.DataFrame(solutions_data)
+        solutions_df = pd.DataFrame(solutions_list)
         solutions = Solutions(
             self.nodes_count,
             self.Tmax,
