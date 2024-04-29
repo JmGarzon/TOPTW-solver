@@ -173,6 +173,27 @@ class TOPTWSolver:
 
         return upper_bound
 
+    def initialize_paths(self, paths_count):
+        self.points_df["path"] = None
+        self.points_df.loc[0, "path"] = "all"
+        depot = {
+            "node_index": 0,
+            "arrival_time": 0,
+            "start_time": 0,
+            "wait": 0,  # max(0, start time - arrival_time)
+            "max_shift": self.points_df.loc[
+                0, "closing_time"
+            ],  # min(closing_time_i - start_time_i, wait_i+1 + max_shift_i+1)
+        }
+        path_dict_list = [
+            {"path_index": path_index, "path": pd.DataFrame([depot, depot])}
+            for path_index in range(paths_count)
+        ]
+        for path_dict in path_dict_list:
+            path_dict["path"].index.name = "position"
+
+        return path_dict_list
+
     def benefit_insertion_ratio(self, feasible_insertion):
         node_index = feasible_insertion["node_index"]
 
@@ -249,26 +270,10 @@ class TOPTWSolver:
         self, criteria, paths_count=1, solutions_count=10, enable_random_noise=False
     ):
         solutions_data = []
+        start_time = time.time()  # Start timing
 
         for _ in range(solutions_count):
-            self.points_df["path"] = None
-            self.points_df.loc[0, "path"] = "all"
-            start_time = time.time()  # Start timing
-            depot = {
-                "node_index": 0,
-                "arrival_time": 0,
-                "start_time": 0,
-                "wait": 0,  # max(0, start time - arrival_time)
-                "max_shift": self.points_df.loc[
-                    0, "closing_time"
-                ],  # min(closing_time_i - start_time_i, wait_i+1 + max_shift_i+1)
-            }
-            path_dict_list = [
-                {"path_index": path_index, "path": pd.DataFrame([depot, depot])}
-                for path_index in range(paths_count)
-            ]
-            for path_dict in path_dict_list:
-                path_dict["path"].index.name = "position"
+            path_dict_list = self.initialize_paths(paths_count)
             F = self.update_F(path_dict_list)
             print(F)
             exit()
