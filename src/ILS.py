@@ -482,19 +482,20 @@ if __name__ == "__main__":
     aggregated_solutions_data = []
     count = 0
     for instance in instances:
-        logging.info("\n")
+        logging.info("\n\n")
         solver = TOPTWSolver(instance)
         logging.info(
             f"Processing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}"
         )
         comparison_parameters = {
-            "solutions_count": 1,
+            "solutions_count": 30,
             "random_noise_flag": True,
             "path_count_list": [1, 2, 3, 4],
             "criteria_list": [solver.benefit_insertion_ratio],
         }
         for path_count in comparison_parameters["path_count_list"]:
             for criteria in comparison_parameters["criteria_list"]:
+                logging.info("\n")
                 logging.info(
                     f"* Parameters: solutions_count={comparison_parameters['solutions_count']}, path_count={path_count}, criteria={criteria.__name__}, random_noise={comparison_parameters['random_noise_flag']}"
                 )
