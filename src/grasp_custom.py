@@ -10,7 +10,6 @@ RESULTS_PATH = r".\results"
 NOISE_SIGNAL_RATIO = 0.1
 
 
-
 class Solutions:
     def __init__(
         self,
@@ -416,7 +415,9 @@ if __name__ == "__main__":
     count = 0
     for instance in instances:
         solver = TOPTWSolver(instance)
-        print(f"\nProcessing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}")
+        print(
+            f"\nProcessing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}"
+        )
         comparison_parameters = {
             "solutions_count": 30,
             "random_noise_flag": True,
