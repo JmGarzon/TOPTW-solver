@@ -6,8 +6,9 @@ import random
 import json
 
 INSTANCES_PATH = r"instances\pr01_10"
-RESULTS_PATH = r".\results"
-NOISE_SIGNAL_RATIO = 0.1
+METHOD_NAME = r"ILS"
+RESULTS_PATH = r".\results\\" + METHOD_NAME
+
 
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
@@ -263,20 +264,139 @@ class TOPTWSolver:
         if feasible_insertion_list:
             F = pd.DataFrame(feasible_insertion_list)
             F = F.sort_values(by="score", ascending=False)
+            F = F.drop_duplicates(subset=["node_index", "score"], keep="first")
             F = F.head(FEASIBLE_CANDIDATES)
             return F
 
-    def ILS(
-        self, criteria, paths_count=1, solutions_count=10, enable_random_noise=False
-    ):
-        solutions_data = []
-        start_time = time.time()  # Start timing
+    def select_F(self, F):
+        sum_score = F["score"].sum()
+        F["probability"] = F["score"] / sum_score
 
-        for _ in range(solutions_count):
-            path_dict_list = self.initialize_paths(paths_count)
+        selected_F = F.sample(1, weights=F["probability"]).drop(columns=["probability"])
+        F.drop(columns=["probability"], inplace=True)
+        return selected_F
+
+    def update_path(self, path_dict_list, selected_F):
+        selected_F = selected_F.iloc[0]
+
+        path_index = int(selected_F["path_index"])
+        node_index = int(selected_F["node_index"])
+        position = int(selected_F["position"])
+        shift_j = selected_F["shift"]
+        arrival_time_j = selected_F["arrival_time"]
+        start_time_j = selected_F["start_time"]
+        wait_j = selected_F["wait"]
+
+        path = path_dict_list[path_index]["path"]
+
+        new_node = {
+            "node_index": node_index,
+            "arrival_time": arrival_time_j,
+            "start_time": start_time_j,
+            "shift": shift_j,
+            "wait": wait_j,
+        }
+        new_node = pd.DataFrame([new_node])
+
+        path = pd.concat(
+            [path.iloc[:position], new_node, path.iloc[position:]]
+        ).reset_index(drop=True)
+
+        # Based on the works of doi:10.1016/j.cor.2009.03.008
+
+        # Update arrival time, wait, start time and max shift for the nodes after the insertion of node j
+        for index, node_k in path.iloc[position + 1 :].iterrows():
+            previous_node = path.loc[index - 1]
+            node_k["wait"] = max(0, node_k["wait"] - previous_node["shift"])
+            node_k["arrival_time"] += shift_j
+            node_k["shift"] = max(0, previous_node["shift"] - node_k["wait"])
+            if node_k["shift"] == 0:
+                break
+            node_k["start_time"] = node_k["start_time"] + node_k["shift"]
+            node_k["max_shift"] -= node_k["shift"]
+            path.loc[index] = node_k
+
+        # Update max shift for the node j and the nodes before it
+        for index, node_j in (
+            path.iloc[: position + 1].sort_index(ascending=False).iterrows()
+        ):
+            index_j = node_j["node_index"]
+            closing_time_j = self.points_df.loc[index_j, "closing_time"]
+            start_time_j = node_j["start_time"]
+
+            node_k = path.loc[index + 1]
+            wait_k = node_k["wait"]
+            max_shift_k = node_k["max_shift"]
+
+            node_j["max_shift"] = min(
+                closing_time_j - start_time_j, wait_k + max_shift_k
+            )
+            path.loc[index] = node_j
+
+        path_dict_list[path_index]["path"] = path
+        self.points_df.loc[node_index, "path"] = path_index
+        return path_dict_list
+
+    def constructive_method(self, criteria, paths_count=1, enable_random=False):
+        path_dict_list = self.initialize_paths(paths_count)
+        F = self.update_F(path_dict_list)
+        while F is not None:
+            if enable_random:
+                selected_F = self.select_F(F)
+            else:
+                selected_F = F.head(1)
+            path_dict_list = self.update_path(path_dict_list, selected_F)
             F = self.update_F(path_dict_list)
-            print(F)
-            exit()
+        return path_dict_list
+
+    def ILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
+        solutions_data = []
+        for s in range(solutions_count):
+            start_time = time.time()  # Start timing the execution
+            path_dict_list = self.constructive_method(
+                criteria, paths_count, enable_random
+            )
+            # Selected nodes for each path
+            solution_paths = []
+            for path_dict in path_dict_list:
+                solution_paths.append(path_dict["path"]["node_index"].values.tolist())
+            end_time = time.time()  # End timing the execution
+
+            # Compute the total revenue of the solution of the points with path != None
+            total_profit = self.points_df[self.points_df["path"].notna()][
+                "profit"
+            ].sum()
+
+            elapsed_time = end_time - start_time  # Calculate elapsed time
+
+            gap = (
+                (self.upper_bound - total_profit) / self.upper_bound
+            ) * 100  # Compute GAP
+
+            solution_data = {
+                "paths": solution_paths,
+                "score": total_profit,
+                "execution_time": elapsed_time,
+                "gap": gap,
+            }
+            print(
+                f"\t Solution # {s} Score: {total_profit} - GAP: {gap:.2f}% - Time: {elapsed_time:.2f}s"
+            )
+            solutions_data.append(solution_data)
+
+        solutions_df = pd.DataFrame(solutions_data)
+        solutions = Solutions(
+            self.nodes_count,
+            self.Tmax,
+            criteria,
+            paths_count,
+            solutions_count,
+            enable_random,
+            self.upper_bound,
+            solutions_df,
+            self.filename,
+        )
+        return solutions
 
 
 if __name__ == "__main__":
@@ -291,7 +411,7 @@ if __name__ == "__main__":
             f"\nProcessing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}"
         )
         comparison_parameters = {
-            "solutions_count": 30,
+            "solutions_count": 10,
             "random_noise_flag": True,
             # "path_count_list": [1, 2, 3, 4],
             "path_count_list": [2],
