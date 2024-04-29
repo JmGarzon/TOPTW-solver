@@ -204,42 +204,46 @@ class TOPTWSolver:
         duration_i = self.points_df.loc[previous_node_idx, "duration"]
         arrival_j = start_i + duration_i + t_ij
 
-        wait_j = max(0, self.points_df.loc[new_node_idx, "opening_time"] - arrival_j)
-        start_j = arrival_j + wait_j
+        if self.points_df.loc[new_node_idx, "closing_time"] >= arrival_j:
+            wait_j = max(
+                0, self.points_df.loc[new_node_idx, "opening_time"] - arrival_j
+            )
+            start_j = arrival_j + wait_j
 
-        service_j = self.points_df.loc[new_node_idx, "duration"]
-        shift_j = t_ij + wait_j + service_j + t_jk - t_ik
+            service_j = self.points_df.loc[new_node_idx, "duration"]
+            shift_j = t_ij + wait_j + service_j + t_jk - t_ik
 
-        # Check if the new node can be inserted into the path
-        wait_k = path.loc[insertion_position, "wait"]
-        max_shift_k = path.loc[insertion_position, "max_shift"]
+            # Check if the new node can be inserted into the path
+            wait_k = path.loc[insertion_position, "wait"]
+            max_shift_k = path.loc[insertion_position, "max_shift"]
 
-        if shift_j <= wait_k + max_shift_k:
-            feasible_insert = {
-                "path_index": path_index,
-                "node_index": new_node_idx,
-                "position": insertion_position,
-                "shift": shift_j,
-                "arrival_time": arrival_j,
-                "start_time": start_j,
-                "wait": wait_j,
-            }
-            feasible_insert["score"] = self.benefit_insertion_ratio(feasible_insert)
-            return feasible_insert
+            if shift_j <= wait_k + max_shift_k:
+                feasible_insert = {
+                    "path_index": path_index,
+                    "node_index": new_node_idx,
+                    "position": insertion_position,
+                    "shift": shift_j,
+                    "arrival_time": arrival_j,
+                    "start_time": start_j,
+                    "wait": wait_j,
+                }
+                feasible_insert["score"] = self.benefit_insertion_ratio(feasible_insert)
+                return feasible_insert
 
     def update_F(self, path_dict_list):
-        feasible_insertions = []
+        feasible_insertion_list = []
         for point in self.points_df[self.points_df["path"].isna()].iterrows():
             for path_dict in path_dict_list:
                 path_size = path_dict["path"].shape[0]
                 for pos in range(1, path_size):  # Both intial and final depot are fixed
-                    feasible_insertions.append(
-                        self.get_feasible(path_dict, point[0], pos)
-                    )
-        F = pd.DataFrame(feasible_insertions)
-        F = F.sort_values(by="score", ascending=False)
-        F = F.head(FEASIBLE_CANDIDATES)
-        return F
+                    feasible_insertion = self.get_feasible(path_dict, point[0], pos)
+                    if feasible_insertion:
+                        feasible_insertion_list.append(feasible_insertion)
+        if feasible_insertion_list:
+            F = pd.DataFrame(feasible_insertion_list)
+            F = F.sort_values(by="score", ascending=False)
+            F = F.head(FEASIBLE_CANDIDATES)
+            return F
 
     def ILS(
         self, criteria, paths_count=1, solutions_count=10, enable_random_noise=False
