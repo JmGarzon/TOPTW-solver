@@ -18,7 +18,7 @@ import logging
 INSTANCES_PATH = r"instances\pr01_10"
 METHOD_NAME = r"ILS_Constructive"
 RESULTS_PATH = r".\results\\" + METHOD_NAME
-LOGGING_LEVEL = logging.INFO
+LOGGING_LEVEL = logging.DEBUG
 
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
@@ -281,15 +281,14 @@ class TOPTWSolver:
         # Update arrival time, wait, start time and max shift for the nodes after the insertion of node j
         for index, node_k in path.iloc[position + 1 :].iterrows():
             previous_node = path.loc[index - 1]
-            node_k["wait"] = max(0, node_k["wait"] - previous_node["shift"])
-            node_k["arrival_time"] += shift_j
             node_k["shift"] = max(0, previous_node["shift"] - node_k["wait"])
-            if node_k["shift"] == 0:
-                break
+            node_k["wait"] = max(0, node_k["wait"] - previous_node["shift"])
+            node_k["arrival_time"] += previous_node["shift"]
             node_k["start_time"] = node_k["start_time"] + node_k["shift"]
             node_k["max_shift"] -= node_k["shift"]
             path.loc[index] = node_k
-
+            if node_k["shift"] == 0:
+                break
         # Update max shift for the node j and the nodes before it
         for index, node_j in (
             path.iloc[: position + 1].sort_index(ascending=False).iterrows()
@@ -419,6 +418,77 @@ class TOPTWSolver:
 
         return solution_data
 
+    def plot_solution(self, path_dict_list, solution_index):
+        """
+        Plot the solution paths on a graph.
+
+        Args:
+            path_dict_list (list): A list of dictionaries representing the paths.
+            solution_index (int): The index of the solution.
+
+        Returns:
+            None
+
+        Note:
+        - This method requires the matplotlib library to be installed.
+        """
+        import matplotlib.pyplot as plt
+
+        # Create a scatter plot of the nodes
+        plt.scatter(
+            self.points_df["x"],
+            self.points_df["y"],
+            c="gray",
+            label="Unvisited Nodes",
+        )
+
+        # Plot the solution paths
+        for path_dict in path_dict_list:
+            path_index = path_dict["path_index"]
+            path = path_dict["path"]
+            path_nodes = path["node_index"].values.tolist()
+            path_x = self.points_df.loc[path_nodes, "x"]
+            path_y = self.points_df.loc[path_nodes, "y"]
+            plt.scatter(path_x, path_y, marker="o", label=f"Path {path_index}")
+
+            print(len(path_nodes) - 1)
+            for i in range(len(path_nodes) - 1):
+                print(i)
+                print(path_nodes)
+                start_position = (path_x.iloc[i], path_y.iloc[i])
+                nex_node = i + 1
+                end_position = (path_x.iloc[nex_node], path_y.iloc[nex_node])
+                plt.annotate(
+                    "",
+                    xy=start_position,
+                    xycoords="data",
+                    xytext=end_position,
+                    textcoords="data",
+                    color="black",
+                    arrowprops=dict(arrowstyle="-|>", connectionstyle="arc3"),
+                )
+
+        # Plot the depots
+        depot = self.points_df.iloc[[0]]
+        plt.scatter(
+            depot["x"],
+            depot["y"],
+            c="red",
+            marker="s",
+            label="Depot",
+        )
+
+        # Set the title and labels
+        plt.title(f"Solution #{solution_index + 1}")
+        plt.xlabel("X Coordinate")
+        plt.ylabel("Y Coordinate")
+
+        # Add a legend
+        plt.legend()
+
+        # Show the plot
+        plt.show()
+
     def ILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
         """
         Implements the Iterated Local Search (ILS) algorithm for solving the TOPTW problem.
@@ -450,6 +520,10 @@ class TOPTWSolver:
             solutions_list.append(
                 self.get_solution_metrics(s_idx, start_time, solution_paths)
             )
+
+            # Plot the solution
+            if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+                self.plot_solution(path_dict_list, s_idx)
 
         solutions_df = pd.DataFrame(solutions_list)
         solutions = Solutions(
