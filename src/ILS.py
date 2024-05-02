@@ -177,15 +177,13 @@ class TOPTWSolver:
         start_i = path.loc[insertion_position - 1, "start_time"]
         duration_i = self.points_df.loc[previous_node_idx, "duration"]
         arrival_j = start_i + duration_i + t_ij
-
-        if self.points_df.loc[new_node_idx, "closing_time"] >= arrival_j:
+        opening_j, closing_j, duration_j = self.points_df.loc[new_node_idx, ["opening_time", "closing_time", "duration"]]
+        if closing_j >= arrival_j:
             wait_j = max(
-                0, self.points_df.loc[new_node_idx, "opening_time"] - arrival_j
+                0, opening_j - arrival_j
             )
             start_j = arrival_j + wait_j
-
-            service_j = self.points_df.loc[new_node_idx, "duration"]
-            shift_j = t_ij + wait_j + service_j + t_jk - t_ik
+            shift_j = t_ij + wait_j + duration_j + t_jk - t_ik
 
             # Check if the new node can be inserted into the path
             wait_k = path.loc[insertion_position, "wait"]
@@ -200,6 +198,9 @@ class TOPTWSolver:
                     "arrival_time": arrival_j,
                     "start_time": start_j,
                     "wait": wait_j,
+                    "open_time": opening_j,
+                    "close_time": closing_j,
+                    "duration": duration_j,
                 }
                 feasible_insert["score"] = criteria(feasible_insert)
                 return feasible_insert
@@ -260,14 +261,13 @@ class TOPTWSolver:
         F.drop(columns=["probability"], inplace=True)
         return selected_F
 
-    def update_path_times(self, path, position, shift_j):
+    def update_path_times(self, path, position):
         """
         Update the arrival time, wait time, start time, and max shift for the nodes in the given path after the insertion of a new node.
 
         Parameters:
         - path (pandas.DataFrame): The path containing the nodes.
         - position (int): The position in the path where the new node is inserted.
-        - shift_j (int): The shift value for the new node.
 
         Returns:
         - path (pandas.DataFrame): The updated path with the arrival time, wait time, start time, and max shift values updated for the nodes.
@@ -281,10 +281,21 @@ class TOPTWSolver:
         # Update arrival time, wait, start time and max shift for the nodes after the insertion of node j
         for index, node_k in path.iloc[position + 1 :].iterrows():
             previous_node = path.loc[index - 1]
-            node_k["shift"] = max(0, previous_node["shift"] - node_k["wait"])
-            node_k["wait"] = max(0, node_k["wait"] - previous_node["shift"])
+            if previous_node["shift"] > node_k["wait"] + node_k["max_shift"]:
+                return None # The path is not feasible
             node_k["arrival_time"] += previous_node["shift"]
-            node_k["start_time"] = node_k["start_time"] + node_k["shift"]
+
+            if previous_node["shift"] > 0:
+                node_k["shift"] = max(0, previous_node["shift"] - node_k["wait"])
+                node_k["wait"] = max(0, node_k["wait"] - previous_node["shift"])
+                node_k["start_time"] = node_k["start_time"] + node_k["shift"]
+            else:
+                node_k_index = int(node_k["node_index"])
+                node_k["wait"] = max(0, self.points_df.loc[node_k_index, "opening_time"] - node_k["arrival_time"])
+                new_start_time = node_k["arrival_time"] + node_k["wait"]
+                node_k["shift"] = new_start_time - node_k["start_time"]
+                node_k["start_time"] = new_start_time
+
             node_k["max_shift"] -= node_k["shift"]
             path.loc[index] = node_k
             if node_k["shift"] == 0:
@@ -319,34 +330,23 @@ class TOPTWSolver:
         Returns:
             list: The updated path_dict_list with the new node added to the path.
         """
-        selected_F = selected_F.iloc[0]
-
-        path_index = int(selected_F["path_index"])
-        node_index = int(selected_F["node_index"])
-        position = int(selected_F["position"])
-        shift_j = selected_F["shift"]
-        arrival_time_j = selected_F["arrival_time"]
-        start_time_j = selected_F["start_time"]
-        wait_j = selected_F["wait"]
-
+        selected_F = selected_F.reset_index(drop=True)
+ 
+        path_index, node_index, position  = selected_F.loc[0,["path_index", "node_index", "position"]]
+        path_index = int(path_index)
+        position = int(position)
+        node_index = int(node_index)
         path = path_dict_list[path_index]["path"]
-
-        new_node = {
-            "node_index": node_index,
-            "arrival_time": arrival_time_j,
-            "start_time": start_time_j,
-            "shift": shift_j,
-            "wait": wait_j,
-        }
-        new_node = pd.DataFrame([new_node])
-
+        new_node  = selected_F.drop(["path_index", "position"], axis=1)
         path = pd.concat(
             [path.iloc[:position], new_node, path.iloc[position:]]
         ).reset_index(drop=True)
 
         path_dict_list[path_index]["path"] = self.update_path_times(
-            path, position, shift_j
+            path, position
         )
+        assert path_dict_list[path_index]["path"] is not None
+
         self.points_df.loc[node_index, "path"] = path_index
         return path_dict_list
 
