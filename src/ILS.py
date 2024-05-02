@@ -489,6 +489,130 @@ class TOPTWSolver:
         # Show the plot
         plt.show()
 
+    def swap1(self, path, i, j):
+        """
+        Swap two nodes in a path.
+
+        Args:
+            path (DataFrame): A DataFrame representing the nodes in the path.
+            i (int): The index of the first node to swap.
+            j (int): The index of the second node to swap.
+
+        Returns:
+            DataFrame: The path with the nodes swapped.
+        """
+        assert i < j
+
+        
+        logging.debug(f"Swapping nodes {i} and {j}")
+        
+        path.loc[i], path.loc[j] = path.loc[j].copy(), path.loc[i].copy()
+
+        path.loc[i:j, ["arrival_time", "start_time", "wait", "max_shift"]] = np.nan
+        path["next_arrival_time"] = np.nan
+        path["shift"] = np.nan # Clean the shift values from previous insertions
+        feasible = True
+        
+        # Update the path times of the nodes between i and j (inclusive)
+        for pos in range(i, j + 1):
+            assert pos != 0 and pos != path.shape[0] - 1
+
+            current_node_idx = int(path.loc[pos, "node_index"])
+
+            previous_node = path.loc[pos - 1]
+            if np.isnan(previous_node["next_arrival_time"]):
+                arrival_time = self.get_arrival_time(current_node_idx, previous_node)
+            else:
+                arrival_time = previous_node["next_arrival_time"]
+
+            opening_time, duration, closing_time = self.points_df.loc[current_node_idx, ["opening_time", "duration", "closing_time"]]
+
+            # Check if the node is feasible
+            if arrival_time > closing_time:
+                feasible = False
+                logging.debug(f"Node {current_node_idx} is not feasible")
+                break
+
+            wait_time = max(0, opening_time - arrival_time)
+            start_time = arrival_time + wait_time
+            service_time = duration
+            distance = self.distance_matrix[current_node_idx][int(path.loc[pos + 1, "node_index"])]
+            logging.debug(f"Arrival time: {arrival_time} - Wait time: {wait_time} - Start time: {start_time} - Service time: {service_time} - Distance: {distance}")
+            next_arrival_time = start_time + service_time + distance
+
+            path.loc[pos, ["arrival_time", "start_time", "wait", "next_arrival_time"]] = [
+                arrival_time,
+                start_time,
+                wait_time,
+                next_arrival_time,
+            ]
+
+        # Update the shift value for j
+        if feasible:
+            next_node_arrival_time = path.loc[j + 1, "arrival_time"] # Arrival time of the next node before the swap
+            path.loc[j, "shift"] = path.loc[j, "next_arrival_time"] - next_node_arrival_time
+            logging.debug(f"Shift value for node {j}: {path.loc[j, 'shift']}")
+            path = self.update_path_times(
+                path, j
+            )
+            if path is None:
+                logging.debug("Path is not feasible")
+                return None
+            
+            return path
+        else:
+            return None
+
+    def get_arrival_time(self, current_node_idx, previous_node):
+        previous_node_idx = int(previous_node["node_index"])
+        prev_start_time = previous_node["start_time"]
+        prev_service_time = self.points_df.loc[previous_node_idx, "duration"]
+        prev_distance = self.distance_matrix[previous_node_idx][current_node_idx]
+                
+        arrival_time = prev_start_time + prev_service_time + prev_distance
+        return arrival_time
+
+    def local_search(self, path_dict_list, type="first_improvement"):
+        
+        assert type in ["first_improvement", "best_improvement"]
+
+        # Select the path with the highest remaining time
+        selected_path = 0
+        lowest_remaining_time = np.Inf
+        for path_index, path_dict in enumerate(path_dict_list):
+            path = path_dict["path"]
+            new_remaining_time = path.iloc[-1]["max_shift"]
+            if new_remaining_time < lowest_remaining_time:
+                selected_path = path_index
+                lowest_remaining_time = new_remaining_time
+        path = path_dict_list[selected_path]["path"]
+
+        best_remaining_time = lowest_remaining_time
+        best_path = path.copy()
+        best_found = False
+
+        # Swap nodes in the path to make space for new nodes
+        path_size = path.shape[0]
+        for i in range(1, path_size - 1):
+            for j in range(i + 1, path_size - 1):
+                new_path = self.swap1(path.copy(), i, j)
+                if new_path is not None:
+                    new_remaining_time = new_path.iloc[-1]["max_shift"]
+                    if new_remaining_time >= best_remaining_time:
+                        best_remaining_time = new_remaining_time
+                        best_path = new_path.copy()
+                        logging.debug(f"Before the swap\n{path}")
+                        logging.debug(f"After the swap\n{new_path}")
+                        if type == "first_improvement":
+                            best_found = True
+                            break 
+            if best_found:
+                break
+
+        # Look for more nodes to insert
+        
+        return best_path
+
     def ILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
         """
         Implements the Iterated Local Search (ILS) algorithm for solving the TOPTW problem.
@@ -521,9 +645,16 @@ class TOPTWSolver:
                 self.get_solution_metrics(s_idx, start_time, solution_paths)
             )
 
+            # Local Search
+            self.local_search(path_dict_list)
+
             # Plot the solution
             if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+                logging.getLogger().setLevel(logging.INFO)
                 self.plot_solution(path_dict_list, s_idx)
+                logging.getLogger().setLevel(logging.DEBUG)
+
+            exit()
 
         solutions_df = pd.DataFrame(solutions_list)
         solutions = Solutions(
