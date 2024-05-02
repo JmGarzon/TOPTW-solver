@@ -16,9 +16,9 @@ import time
 import logging
 
 INSTANCES_PATH = r"instances\pr01_10"
-METHOD_NAME = r"ILS_Constructive"
+METHOD_NAME = r"LOCAL_SEARCH"
 RESULTS_PATH = r".\results\\" + METHOD_NAME
-LOGGING_LEVEL = logging.DEBUG
+LOGGING_LEVEL = logging.INFO
 
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
@@ -350,13 +350,13 @@ class TOPTWSolver:
         self.points_df.loc[node_index, "path"] = path_index
         return path_dict_list
 
-    def constructive_method(self, criteria, paths_count=1, enable_random=False):
+    def constructive_method(self, criteria, path_dict_list, enable_random=False):
         """
         Constructs initial paths using a constructive method.
 
         Args:
             criteria (str): The criteria used for constructing the paths.
-            paths_count (int, optional): The number of paths to construct. Defaults to 1.
+            path_dict_list (list): The list of dictionaries representing the paths.
             enable_random (bool, optional): Flag to enable random selection of paths. Defaults to False.
 
         Returns:
@@ -366,7 +366,6 @@ class TOPTWSolver:
         - Based on the constructive method described in:
           https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
         """
-        path_dict_list = self.initialize_paths(paths_count)
         F = self.update_F(path_dict_list, criteria)
         while F is not None:
             if enable_random:
@@ -451,10 +450,7 @@ class TOPTWSolver:
             path_y = self.points_df.loc[path_nodes, "y"]
             plt.scatter(path_x, path_y, marker="o", label=f"Path {path_index}")
 
-            print(len(path_nodes) - 1)
             for i in range(len(path_nodes) - 1):
-                print(i)
-                print(path_nodes)
                 start_position = (path_x.iloc[i], path_y.iloc[i])
                 nex_node = i + 1
                 end_position = (path_x.iloc[nex_node], path_y.iloc[nex_node])
@@ -551,7 +547,6 @@ class TOPTWSolver:
         if feasible:
             next_node_arrival_time = path.loc[j + 1, "arrival_time"] # Arrival time of the next node before the swap
             path.loc[j, "shift"] = path.loc[j, "next_arrival_time"] - next_node_arrival_time
-            logging.debug(f"Shift value for node {j}: {path.loc[j, 'shift']}")
             path = self.update_path_times(
                 path, j
             )
@@ -577,41 +572,62 @@ class TOPTWSolver:
         assert type in ["first_improvement", "best_improvement"]
 
         # Select the path with the highest remaining time
-        selected_path = 0
-        lowest_remaining_time = np.Inf
-        for path_index, path_dict in enumerate(path_dict_list):
-            path = path_dict["path"]
-            new_remaining_time = path.iloc[-1]["max_shift"]
-            if new_remaining_time < lowest_remaining_time:
-                selected_path = path_index
-                lowest_remaining_time = new_remaining_time
-        path = path_dict_list[selected_path]["path"]
+        # selected_path = 0
+        # lowest_remaining_time = np.Inf
+        # for path_index, path_dict in enumerate(path_dict_list):
+        #     path = path_dict["path"]
+        #     new_remaining_time = path.iloc[-1]["max_shift"]
+        #     if new_remaining_time < lowest_remaining_time:
+        #         selected_path = path_index
+        #         lowest_remaining_time = new_remaining_time
+        # path = path_dict_list[selected_path]["path"]
+        # Compute the total revenue of the visited locations
+        total_profit = self.points_df[self.points_df["path"].notna()]["profit"].sum()
+        logging.info(f"Total profit before the local search: {total_profit}")
+        stop = False
+        while not stop:
+            stop = True
+            for path_index, path_dict in enumerate(path_dict_list):
+                path = path_dict["path"]
+                best_remaining_time = path.iloc[-1]["max_shift"]
 
-        best_remaining_time = lowest_remaining_time
-        best_path = path.copy()
-        best_found = False
+                best_path = path.copy()
+                best_found = False
 
-        # Swap nodes in the path to make space for new nodes
-        path_size = path.shape[0]
-        for i in range(1, path_size - 1):
-            for j in range(i + 1, path_size - 1):
-                new_path = self.swap1(path.copy(), i, j)
-                if new_path is not None:
-                    new_remaining_time = new_path.iloc[-1]["max_shift"]
-                    if new_remaining_time >= best_remaining_time:
-                        best_remaining_time = new_remaining_time
-                        best_path = new_path.copy()
-                        logging.debug(f"Before the swap\n{path}")
-                        logging.debug(f"After the swap\n{new_path}")
-                        if type == "first_improvement":
-                            best_found = True
-                            break 
-            if best_found:
-                break
+                # Swap nodes in the path to make space for new nodes
+                path_size = path.shape[0]
+                for i in range(1, path_size - 1):
+                    for j in range(i + 1, path_size - 1):
+                        new_path = self.swap1(path.copy(), i, j)
+                        if new_path is not None:
+                            new_remaining_time = new_path.iloc[-1]["max_shift"]
+                            if new_remaining_time > best_remaining_time:
+                                best_remaining_time = new_remaining_time
+                                best_path = new_path.copy()
+                                if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+                                    logging.debug(f"Before the swap\n{path}")
+                                    logging.debug(f"After the swap\n{new_path}")
+                                if type == "first_improvement":
+                                    best_found = True
+                                    break 
+                    if best_found:
+                        break
 
-        # Look for more nodes to insert
-        
-        return best_path
+                path_dict_list[path_index]["path"] = best_path
+                if best_remaining_time > path.iloc[-1]["max_shift"]:
+                    
+                    # Look for more nodes to insert
+                    path_dict_list = self.constructive_method(
+                        self.benefit_insertion_ratio, path_dict_list, True
+                    )
+                # Compute the total revenue of the visited locations
+                new_total_profit = self.points_df[self.points_df["path"].notna()]["profit"].sum()
+                if new_total_profit > total_profit:
+                    total_profit = new_total_profit
+                    stop = False
+
+        logging.info(f"Total profit after the local search: {new_total_profit}")
+        return path_dict_list
 
     def ILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
         """
@@ -634,19 +650,10 @@ class TOPTWSolver:
         solutions_list = []
         for s_idx in range(solutions_count):
             start_time = time.time()  # Start timing the execution
+            path_dict_list = self.initialize_paths(paths_count)
             path_dict_list = self.constructive_method(
-                criteria, paths_count, enable_random
+                criteria, path_dict_list, enable_random
             )
-            # Selected nodes for each path
-            solution_paths = []
-            for path_dict in path_dict_list:
-                solution_paths.append(path_dict["path"]["node_index"].values.tolist())
-            solutions_list.append(
-                self.get_solution_metrics(s_idx, start_time, solution_paths)
-            )
-
-            # Local Search
-            self.local_search(path_dict_list)
 
             # Plot the solution
             if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
@@ -654,7 +661,22 @@ class TOPTWSolver:
                 self.plot_solution(path_dict_list, s_idx)
                 logging.getLogger().setLevel(logging.DEBUG)
 
-            exit()
+            # Local Search
+            path_dict_list = self.local_search(path_dict_list)
+
+            # Plot the solution
+            if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+                logging.getLogger().setLevel(logging.INFO)
+                self.plot_solution(path_dict_list, s_idx)
+                logging.getLogger().setLevel(logging.DEBUG)
+
+            # Selected nodes for each path
+            solution_paths = []
+            for path_dict in path_dict_list:
+                solution_paths.append(path_dict["path"]["node_index"].values.tolist())
+            solutions_list.append(
+                self.get_solution_metrics(s_idx, start_time, solution_paths)
+            )
 
         solutions_df = pd.DataFrame(solutions_list)
         solutions = Solutions(
