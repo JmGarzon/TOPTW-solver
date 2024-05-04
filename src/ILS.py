@@ -16,7 +16,7 @@ import time
 import logging
 
 INSTANCES_PATH = r"instances\pr01_10"
-METHOD_NAME = r"LOCAL_SEARCH"
+METHOD_NAME = r"LOCAL_SEARCH_BI"
 RESULTS_PATH = r".\results\\" + METHOD_NAME
 LOGGING_LEVEL = logging.INFO
 
@@ -567,7 +567,7 @@ class TOPTWSolver:
         arrival_time = prev_start_time + prev_service_time + prev_distance
         return arrival_time
 
-    def local_search(self, path_dict_list, type="first_improvement"):
+    def local_search(self, path_dict_list, type="best_improvement"):
         
         assert type in ["first_improvement", "best_improvement"]
 
