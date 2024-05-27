@@ -16,7 +16,7 @@ import time
 import logging
 
 INSTANCES_PATH = r"instances\pr01_10"
-METHOD_NAME = r"LOCAL_SEARCH_BI"
+METHOD_NAME = r"ITERATED_LOCAL_SEARCH"
 RESULTS_PATH = r".\results\\" + METHOD_NAME
 LOGGING_LEVEL = logging.INFO
 
@@ -559,6 +559,16 @@ class TOPTWSolver:
             return None
 
     def get_arrival_time(self, current_node_idx, previous_node):
+        """
+        Calculates the arrival time at a given node based on the current node index and the previous node.
+
+        Args:
+            current_node_idx (int): The index of the current node.
+            previous_node (dict): The previous node information, including the node index, start time, and duration.
+
+        Returns:
+            float: The arrival time at the current node.
+        """
         previous_node_idx = int(previous_node["node_index"])
         prev_start_time = previous_node["start_time"]
         prev_service_time = self.points_df.loc[previous_node_idx, "duration"]
@@ -629,6 +639,136 @@ class TOPTWSolver:
         logging.info(f"Total profit after the local search: {new_total_profit}")
         return path_dict_list
 
+    def perturbation(self, path_dict_list, consecutive_nodes, position):
+        """
+        Perturbs the given paths by removing consecutive nodes starting from the specified position.
+
+        Args:
+            path_dict_list (list): A list of dictionaries containing the paths.
+            consecutive_nodes (int): The number of consecutive nodes to remove.
+            position (int): The position in the path where the removal should start.
+
+        Returns:
+            list: The updated path_dict_list with perturbed paths.
+
+        Raises:
+            AssertionError: If the position is not within the valid range.
+
+        """
+        assert position > 0
+        assert position < path_dict_list[0]["path"].shape[0]
+
+        for path_dict in path_dict_list:
+            path = path_dict["path"]
+            print("Initial path\n", path)
+            path, rollover, final_position = self.remove_nodes(path, consecutive_nodes, position)
+            path["shift"] = np.nan # Clean the shift values from previous insertions
+            # Update the path times of the node after the removed nodes
+            arrival_time, wait_time, start_time, shift = self.update_node(path, final_position + 1)
+            path.loc[final_position + 1, ["arrival_time", "start_time", "wait", "shift"]] = [
+                arrival_time,
+                start_time,
+                wait_time,
+                shift
+                ]
+        
+            # Reset index to avoid problems with the update_path_times method
+            path.reset_index(inplace=True)
+            new_position = path[path['index'] == final_position + 1].index
+            path = path.drop(columns=['index'])
+
+            # Update the path times of the nodes after the removed nodes
+            path = self.update_path_times(path, int(new_position[0]))
+
+            # Update the path times of the depot
+            if rollover:
+                path["shift"] = np.nan # Clean the shift values from previous insertions
+                arrival_time, wait_time, start_time, shift = self.update_node(path, path.index[-2])
+                path.loc[path.index[-2], ["arrival_time", "start_time", "wait", "shift"]] = [
+                    arrival_time,
+                    start_time,
+                    wait_time,
+                    shift
+                    ]
+                # Update the Max Shift of the nodes before the depot
+                path = self.update_path_times(path, path.index[-2])
+
+        print("Final path with new times\n", path)
+        return path_dict_list
+
+    def remove_nodes(self, path, consecutive_nodes, position):  
+        """
+        Removes consecutive nodes from a given path starting at a specified position.
+
+        Args:
+            path (pandas.DataFrame): The path from which nodes will be removed.
+            consecutive_nodes (int): The number of consecutive nodes to remove.
+            position (int): The starting position from which to remove nodes.
+
+        Returns:
+            tuple: A tuple containing the updated path, a boolean indicating if a rollover occurred, and the final position after removal.
+        """
+        path_size = path.shape[0]
+        
+        rollover = False
+
+        positions_to_remove = []
+        final_position = position
+        for i in range(position, position + consecutive_nodes):
+            final_position = i
+            if i >= path_size - 1:
+                final_position = i - path_size + 2  # To exclude the depot
+                rollover = True
+
+            node_index = int(path.loc[final_position, "node_index"])
+            self.points_df.loc[node_index, "path"] = None
+            positions_to_remove.append(final_position)
+
+        path = path.drop(positions_to_remove)
+
+        return path, rollover, final_position
+
+    def update_node(self, path, position):
+        """
+        Update the information of a node in the given path.
+
+        Args:
+            path (pandas.DataFrame): The path containing the nodes.
+            position (int): The index of the node to update.
+
+        Returns:
+            tuple: A tuple containing the updated arrival time, wait time, start time, and shift.
+
+        Raises:
+            KeyError: If the node index is not found in the path.
+
+        """
+        node_to_update_index = int(path.loc[position, "node_index"])
+
+        row_to_update = path.index.get_loc(position)
+        previous_row = row_to_update - 1
+        previous_node = path.loc[path.index[previous_row]]
+
+        arrival_time = self.get_arrival_time(node_to_update_index, previous_node)
+        opening_time, duration = self.points_df.loc[node_to_update_index , ["opening_time", "duration"]]
+
+        wait_time = max(0, opening_time - arrival_time)
+        start_time = arrival_time + wait_time
+        service_time = duration
+
+        if position == path.shape[0] - 1:
+            return arrival_time, wait_time, start_time, 0
+
+        next_row = row_to_update + 1
+        next_node = path.loc[path.index[next_row]]
+        distance = self.distance_matrix[node_to_update_index][int(next_node["node_index"])]
+        updated_next_arrival_time = start_time + service_time + distance
+
+        old_next_arrival_time = next_node["arrival_time"]
+        shift = updated_next_arrival_time - old_next_arrival_time
+        return arrival_time, wait_time, start_time, shift
+    
+    
     def ILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
         """
         Implements the Iterated Local Search (ILS) algorithm for solving the TOPTW problem.
@@ -654,21 +794,27 @@ class TOPTWSolver:
             path_dict_list = self.constructive_method(
                 criteria, path_dict_list, enable_random
             )
-
+            pass
             # Plot the solution
             if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
                 logging.getLogger().setLevel(logging.INFO)
                 self.plot_solution(path_dict_list, s_idx)
                 logging.getLogger().setLevel(logging.DEBUG)
 
+            # Perturbation
+            position  = path_dict_list[0]["path"].shape[0] - 2 
+            path_dict_list = self.perturbation(path_dict_list, position=position, consecutive_nodes=4)
+            
             # Local Search
             path_dict_list = self.local_search(path_dict_list)
-
+            pass
             # Plot the solution
             if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
                 logging.getLogger().setLevel(logging.INFO)
                 self.plot_solution(path_dict_list, s_idx)
                 logging.getLogger().setLevel(logging.DEBUG)
+
+            
 
             # Selected nodes for each path
             solution_paths = []
@@ -677,7 +823,7 @@ class TOPTWSolver:
             solutions_list.append(
                 self.get_solution_metrics(s_idx, start_time, solution_paths)
             )
-
+            exit()
         solutions_df = pd.DataFrame(solutions_list)
         solutions = Solutions(
             self.nodes_count,
