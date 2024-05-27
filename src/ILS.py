@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 import time
 import logging
+import copy
 
 INSTANCES_PATH = r"instances\pr01_10"
 METHOD_NAME = r"ITERATED_LOCAL_SEARCH"
@@ -22,7 +23,7 @@ LOGGING_LEVEL = logging.INFO
 
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
-
+MAX_NO_IMPROVEMENTS = 150
 
 class TOPTWSolver:
     def __init__(self, instance):
@@ -412,7 +413,7 @@ class TOPTWSolver:
         }
 
         logging.info(
-            f"\t Solution # {s_idx + 1} Score: {total_profit} - GAP: {gap:.2f}% - Time: {elapsed_time:.2f}s"
+            f"\t Solution # {s_idx + 1} Score: {total_profit} - GAP: {gap:.2f}% - Time: {elapsed_time:.2f}s\n"
         )
 
         return solution_data
@@ -580,20 +581,8 @@ class TOPTWSolver:
     def local_search(self, path_dict_list, type="best_improvement"):
         
         assert type in ["first_improvement", "best_improvement"]
-
-        # Select the path with the highest remaining time
-        # selected_path = 0
-        # lowest_remaining_time = np.Inf
-        # for path_index, path_dict in enumerate(path_dict_list):
-        #     path = path_dict["path"]
-        #     new_remaining_time = path.iloc[-1]["max_shift"]
-        #     if new_remaining_time < lowest_remaining_time:
-        #         selected_path = path_index
-        #         lowest_remaining_time = new_remaining_time
-        # path = path_dict_list[selected_path]["path"]
-        # Compute the total revenue of the visited locations
         total_profit = self.points_df[self.points_df["path"].notna()]["profit"].sum()
-        logging.info(f"Total profit before the local search: {total_profit}")
+        logging.debug(f"Total profit before the local search: {total_profit}")
         stop = False
         while not stop:
             stop = True
@@ -624,19 +613,18 @@ class TOPTWSolver:
                         break
 
                 path_dict_list[path_index]["path"] = best_path
-                if best_remaining_time > path.iloc[-1]["max_shift"]:
                     
-                    # Look for more nodes to insert
-                    path_dict_list = self.constructive_method(
-                        self.benefit_insertion_ratio, path_dict_list, True
-                    )
+                # Look for more nodes to insert
+                path_dict_list = self.constructive_method(
+                    self.benefit_insertion_ratio, path_dict_list, True
+                )
                 # Compute the total revenue of the visited locations
                 new_total_profit = self.points_df[self.points_df["path"].notna()]["profit"].sum()
                 if new_total_profit > total_profit:
                     total_profit = new_total_profit
                     stop = False
 
-        logging.info(f"Total profit after the local search: {new_total_profit}")
+        logging.debug(f"Total profit after the local search: {new_total_profit}")
         return path_dict_list
 
     def perturbation(self, path_dict_list, consecutive_nodes, position):
@@ -658,27 +646,33 @@ class TOPTWSolver:
         assert position > 0
         assert position < path_dict_list[0]["path"].shape[0]
 
-        for path_dict in path_dict_list:
+        for index, path_dict in enumerate(path_dict_list):
             path = path_dict["path"]
-            print("Initial path\n", path)
             path, rollover, final_position = self.remove_nodes(path, consecutive_nodes, position)
             path["shift"] = np.nan # Clean the shift values from previous insertions
             # Update the path times of the node after the removed nodes
-            arrival_time, wait_time, start_time, shift = self.update_node(path, final_position + 1)
-            path.loc[final_position + 1, ["arrival_time", "start_time", "wait", "shift"]] = [
-                arrival_time,
-                start_time,
-                wait_time,
-                shift
-                ]
-        
-            # Reset index to avoid problems with the update_path_times method
-            path.reset_index(inplace=True)
-            new_position = path[path['index'] == final_position + 1].index
-            path = path.drop(columns=['index'])
+ 
+            if path.loc[final_position + 1, "node_index"] == 0:
+                rollover = True
+                
+                # Reset index to avoid problems with the update_path_times method
+                path.reset_index(inplace=True, drop=True)
+            else:
+                arrival_time, wait_time, start_time, shift = self.update_node(path, final_position + 1)
+                path.loc[final_position + 1, ["arrival_time", "start_time", "wait", "shift"]] = [
+                    arrival_time,
+                    start_time,
+                    wait_time,
+                    shift
+                    ]
+            
+                # Reset index to avoid problems with the update_path_times method
+                path.reset_index(inplace=True)
+                new_position = path[path['index'] == final_position + 1].index
+                path = path.drop(columns=['index'])
 
-            # Update the path times of the nodes after the removed nodes
-            path = self.update_path_times(path, int(new_position[0]))
+                # Update the path times of the nodes after the removed nodes
+                path = self.update_path_times(path, int(new_position[0]))
 
             # Update the path times of the depot
             if rollover:
@@ -692,8 +686,8 @@ class TOPTWSolver:
                     ]
                 # Update the Max Shift of the nodes before the depot
                 path = self.update_path_times(path, path.index[-2])
+            path_dict_list[index]["path"] = path
 
-        print("Final path with new times\n", path)
         return path_dict_list
 
     def remove_nodes(self, path, consecutive_nodes, position):  
@@ -768,7 +762,6 @@ class TOPTWSolver:
         shift = updated_next_arrival_time - old_next_arrival_time
         return arrival_time, wait_time, start_time, shift
     
-    
     def ILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
         """
         Implements the Iterated Local Search (ILS) algorithm for solving the TOPTW problem.
@@ -789,41 +782,68 @@ class TOPTWSolver:
 
         solutions_list = []
         for s_idx in range(solutions_count):
+            logging.info(f"\t Solution #{s_idx + 1}")
             start_time = time.time()  # Start timing the execution
-            path_dict_list = self.initialize_paths(paths_count)
-            path_dict_list = self.constructive_method(
-                criteria, path_dict_list, enable_random
-            )
-            pass
-            # Plot the solution
-            if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
-                logging.getLogger().setLevel(logging.INFO)
-                self.plot_solution(path_dict_list, s_idx)
-                logging.getLogger().setLevel(logging.DEBUG)
 
-            # Perturbation
-            position  = path_dict_list[0]["path"].shape[0] - 2 
-            path_dict_list = self.perturbation(path_dict_list, position=position, consecutive_nodes=4)
-            
+            new_solution = self.initialize_paths(paths_count)
+
+            new_solution = self.constructive_method(criteria, new_solution, enable_random)
+            constructive_score = self.points_df[self.points_df["path"].notna()]["profit"].sum()
+            logging.info(f"\t\t * Constructive method solution score: {constructive_score}")
+
             # Local Search
-            path_dict_list = self.local_search(path_dict_list)
-            pass
-            # Plot the solution
-            if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
-                logging.getLogger().setLevel(logging.INFO)
-                self.plot_solution(path_dict_list, s_idx)
-                logging.getLogger().setLevel(logging.DEBUG)
+            new_solution = self.local_search(new_solution)
 
-            
+            best_solution = copy.deepcopy(new_solution)
+            best_solution_score = self.points_df[self.points_df["path"].notna()]["profit"].sum()
+            logging.info(f"\t\t * Local search solution score: {best_solution_score}")
+
+            position = 1
+            consecutive_nodes = 1
+            no_improvement = 0
+            while no_improvement < MAX_NO_IMPROVEMENTS:
+
+                new_solution = self.perturbation(new_solution, consecutive_nodes, position)
+
+                position = position + consecutive_nodes
+                consecutive_nodes += 1
+                path_sizes = [path["path"].shape[0] for path in new_solution]
+                if position >= min(path_sizes):
+                    position = position - min(path_sizes) + 1
+
+                if consecutive_nodes >= max(path_sizes) - 2:
+                    consecutive_nodes = 1
+
+                new_solution = self.local_search(new_solution)
+                new_solution_score = self.points_df[self.points_df["path"].notna()]["profit"].sum()
+                if new_solution_score > best_solution_score:
+                    best_solution = copy.deepcopy(new_solution)
+                    best_solution_score = new_solution_score
+                    no_improvement = 0
+                    consecutive_nodes = 1
+                else:
+                    no_improvement += 1
+
+            logging.info(f"\t\t * ILS solution score: {best_solution_score}")
+            new_solution = best_solution
+
+            self.points_df["path"] = None
+
+            # Update points_df with the best solution
+            for path_dict in new_solution:
+                path = path_dict["path"]
+                path_nodes = path["node_index"].values.tolist()
+                self.points_df.loc[path_nodes, "path"] = path_dict["path_index"]
+            self.points_df.loc[0, "arrival_time"] = "all"
 
             # Selected nodes for each path
             solution_paths = []
-            for path_dict in path_dict_list:
+            for path_dict in new_solution:
                 solution_paths.append(path_dict["path"]["node_index"].values.tolist())
             solutions_list.append(
                 self.get_solution_metrics(s_idx, start_time, solution_paths)
             )
-            exit()
+
         solutions_df = pd.DataFrame(solutions_list)
         solutions = Solutions(
             self.nodes_count,
@@ -847,28 +867,26 @@ if __name__ == "__main__":
     logging.basicConfig(
         level=LOGGING_LEVEL,
         format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler("logfile.log"), logging.StreamHandler()],
+        handlers=[logging.FileHandler("logfile.log", mode='w'), logging.StreamHandler()],
     )
-    logging.info("Starting TOPTW Solver: New constructive method")
+    logging.info("Starting TOPTW Solver: ILS Method\n")    
 
     instances = read_instances(INSTANCES_PATH)
     aggregated_solutions_data = []
     count = 0
     for instance in instances:
-        logging.info("\n\n")
         solver = TOPTWSolver(instance)
         logging.info(
-            f"Processing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}"
+            f"Processing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}\n"
         )
         comparison_parameters = {
-            "solutions_count": 30,
+            "solutions_count": 3,
             "random_noise_flag": True,
             "path_count_list": [1, 2, 3, 4],
             "criteria_list": [solver.benefit_insertion_ratio],
         }
         for path_count in comparison_parameters["path_count_list"]:
             for criteria in comparison_parameters["criteria_list"]:
-                logging.info("\n")
                 logging.info(
                     f"* Parameters: solutions_count={comparison_parameters['solutions_count']}, path_count={path_count}, criteria={criteria.__name__}, random_noise={comparison_parameters['random_noise_flag']}"
                 )
