@@ -925,16 +925,18 @@ if __name__ == "__main__":
             logging.StreamHandler(),
         ],
     )
-    logging.info("Starting TOPTW Solver: ILS Method\n")
+    logging.info("Starting TOPTW Solver: ILS Method\n\n")
 
     instances = read_instances(INSTANCES_PATH)
     aggregated_solutions_data = []
     count = 0
     for instance in instances:
         solver = TOPTWSolver(instance)
+        logging.info("----------------------------------------")
         logging.info(
-            f"Processing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}\n"
+            f"Processing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}"
         )
+        logging.info("----------------------------------------")
         comparison_parameters = {
             "solutions_count": 2,
             "random_noise_flag": True,
