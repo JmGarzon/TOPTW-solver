@@ -663,7 +663,6 @@ class TOPTWSolver:
 
         """
         assert position > 0
-        assert position < path_dict_list[0]["path"].shape[0]
 
         for index, path_dict in enumerate(path_dict_list):
             path = path_dict["path"]
@@ -724,15 +723,24 @@ class TOPTWSolver:
             tuple: A tuple containing the updated path, a boolean indicating if a rollover occurred, and the final position after removal.
         """
         path_size = path.shape[0]
+        positions_to_remove = []
 
         rollover = False
+        final_position = None
 
-        positions_to_remove = []
-        final_position = position
+        # Adjust the initial position if it exceeds the valid range
+        if position >= path_size - 1:
+            position = position % (path_size - 1) + 1
+
+        # Iterate through the positions, handling rollover cases
         for i in range(position, position + consecutive_nodes):
-            final_position = i
+            final_position = i % (
+                path_size - 1
+            )  # Ensure final position is within valid range, excluding the depot at the end
+            if final_position == 0:
+                final_position = 1  # Skip the depot at the start
+
             if i >= path_size - 1:
-                final_position = i - path_size + 2  # To exclude the depot
                 rollover = True
 
             node_index = int(path.loc[final_position, "node_index"])
@@ -843,8 +851,8 @@ class TOPTWSolver:
                 position = position + consecutive_nodes
                 consecutive_nodes += 1
                 path_sizes = [path["path"].shape[0] for path in new_solution]
-                if position >= min(path_sizes):
-                    position = position - min(path_sizes) + 1
+                if position > min(path_sizes) - 2:
+                    position = position - min(path_sizes) + 2
 
                 if consecutive_nodes >= max(path_sizes) - 2:
                     consecutive_nodes = 1
