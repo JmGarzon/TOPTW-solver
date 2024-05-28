@@ -610,6 +610,24 @@ class TOPTWSolver:
         return arrival_time
 
     def local_search(self, path_dict_list, type="best_improvement"):
+        """
+        Perform a local search to improve the constructed paths.
+
+        Args:
+            path_dict_list (list): A list of dictionaries containing the paths.
+            type (str, optional): The type of local search to perform. Defaults to "best_improvement".
+
+        Returns:
+            list: The updated path_dict_list with the improved paths.
+
+        Raises:
+            AssertionError: If the type is not valid.
+
+        Note:
+            Based on the works of:
+            - https://doi.org/10.1016/j.cor.2009.03.00  8 "Iterated local search for the team orienteering problem with time windows"
+            - https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
+        """
 
         assert type in ["first_improvement", "best_improvement"]
         total_profit = self.points_df[self.points_df["path"].notna()]["profit"].sum()
@@ -678,6 +696,11 @@ class TOPTWSolver:
         Raises:
             AssertionError: If the position is not within the valid range.
 
+        Note:
+            Based on the works of:
+            - https://doi.org/10.1016/j.cor.2009.03.00  8 "Iterated local search for the team orienteering problem with time windows"
+            - https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
+
         """
         assert position > 0
 
@@ -738,6 +761,11 @@ class TOPTWSolver:
 
         Returns:
             tuple: A tuple containing the updated path, a boolean indicating if a rollover occurred, and the final position after removal.
+
+        Note:
+            Based on the works of:
+            - https://doi.org/10.1016/j.cor.2009.03.00  8 "Iterated local search for the team orienteering problem with time windows"
+            - https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
         """
         path_size = path.shape[0]
         positions_to_remove = []
@@ -781,7 +809,6 @@ class TOPTWSolver:
 
         Raises:
             KeyError: If the node index is not found in the path.
-
         """
         node_to_update_index = int(path.loc[position, "node_index"])
 
@@ -826,8 +853,9 @@ class TOPTWSolver:
             Solutions: An object containing the generated solutions.
 
         Note:
-        - Based on the ILS algorithm described in:
-          https://doi.org/10.1016/j.cor.2009.03.008 "Iterated local search for the team orienteering problem with time windows"
+            Based on the works of:
+            - https://doi.org/10.1016/j.cor.2009.03.00  8 "Iterated local search for the team orienteering problem with time windows"
+            - https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
         """
 
         solutions_list = []
@@ -1015,14 +1043,19 @@ def save_aggregated_solutions(aggregated_solutions_data):
 
 
 def spinner(done_event):
-    for c in itertools.cycle(['|', '/', '-', '\\']):
+    """
+    Display a spinner to indicate activity.
+
+    Args:
+        done_event (threading.Event): An event to signal when the activity is complete.
+    """
+    for c in itertools.cycle(["|", "/", "-", "\\"]):
         if done_event.is_set():
             sys.stdout.flush()
             break
-        sys.stdout.write('\rProcessing ' + c)
+        sys.stdout.write("\rProcessing " + c)
         sys.stdout.flush()
         time.sleep(0.1)
-
 
 
 if __name__ == "__main__":
@@ -1038,7 +1071,7 @@ if __name__ == "__main__":
     logging.info(
         "Please follow the progress of each worker in their respective log files...\n"
     )
-    
+
     # Start the spinner thread to show activity
     done_event = threading.Event()
     spinner_thread = threading.Thread(target=spinner, args=(done_event,))
@@ -1059,7 +1092,7 @@ if __name__ == "__main__":
                     count += 1
                 except Exception as exc:
                     logging.error(f"Instance {instance} generated an exception: {exc}")
-        
+
         logging.info("----------------------------------------")
         logging.info(f"Total instances processed: {count}")
         logging.info("----------------------------------------")
