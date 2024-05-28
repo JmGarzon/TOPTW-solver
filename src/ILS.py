@@ -24,6 +24,7 @@ LOGGING_LEVEL = logging.INFO
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
 MAX_NO_IMPROVEMENTS = 150
+MAX_EXECUTION_TIME = 900  # 15 minutes
 
 
 class TOPTWSolver:
@@ -842,7 +843,12 @@ class TOPTWSolver:
             position = 1
             consecutive_nodes = 1
             no_improvement = 0
-            while no_improvement < MAX_NO_IMPROVEMENTS:
+            elapsed_time = time.time() - start_time
+
+            while (
+                no_improvement < MAX_NO_IMPROVEMENTS
+                and elapsed_time < MAX_EXECUTION_TIME
+            ):
 
                 new_solution = self.perturbation(
                     new_solution, consecutive_nodes, position
@@ -868,6 +874,8 @@ class TOPTWSolver:
                     consecutive_nodes = 1
                 else:
                     no_improvement += 1
+
+                elapsed_time = time.time() - start_time
 
             logging.info(f"\t\t * ILS solution score: {best_solution_score}")
             new_solution = best_solution
@@ -928,7 +936,7 @@ if __name__ == "__main__":
             f"Processing: {solver.filename} - N: {solver.nodes_count} - T_max: {solver.Tmax}\n"
         )
         comparison_parameters = {
-            "solutions_count": 3,
+            "solutions_count": 2,
             "random_noise_flag": True,
             "path_count_list": [1, 2, 3, 4],
             "criteria_list": [solver.benefit_insertion_ratio],
