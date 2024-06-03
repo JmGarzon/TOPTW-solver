@@ -1,4 +1,3 @@
-
 import os
 import logging
 import pandas as pd
@@ -14,7 +13,6 @@ import time
 import sys
 
 
-
 INSTANCES_PATH = r"instances\pr01_10"
 METHOD_NAME = r"ITERATED_LOCAL_SEARCH"
 RESULTS_PATH = r".\results\\" + METHOD_NAME
@@ -24,7 +22,6 @@ LOGGING_LEVEL = logging.INFO
 # Parameters for the evaluation
 SOLUTIONS_COUNT = 5
 PATH_COUNT_LIST = [1, 2, 3, 4]
-
 
 
 def configure_logging(name, console=False):
@@ -162,7 +159,9 @@ if __name__ == "__main__":
                     aggregated_solutions_data.append(result[0])
                     count += 1
                 except Exception as exc:
-                    logging.error(f"Instance {instance} generated an exception: {exc}")
+                    logging.exception(
+                        f"Instance {instance} generated an exception: {exc}"
+                    )
 
         logging.info("----------------------------------------")
         logging.info(f"Total instances processed: {count}")

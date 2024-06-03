@@ -501,8 +501,6 @@ class TOPTWSolver:
         """
         assert i < j
 
-        logging.debug(f"Swapping nodes {i} and {j}")
-
         path.loc[i], path.loc[j] = path.loc[j].copy(), path.loc[i].copy()
 
         path.loc[i:j, ["arrival_time", "start_time", "wait", "max_shift"]] = np.nan
@@ -529,7 +527,6 @@ class TOPTWSolver:
             # Check if the node is feasible
             if arrival_time > closing_time:
                 feasible = False
-                logging.debug(f"Node {current_node_idx} is not feasible")
                 break
 
             wait_time = max(0, opening_time - arrival_time)
@@ -538,9 +535,6 @@ class TOPTWSolver:
             distance = self.distance_matrix[current_node_idx][
                 int(path.loc[pos + 1, "node_index"])
             ]
-            logging.debug(
-                f"Arrival time: {arrival_time} - Wait time: {wait_time} - Start time: {start_time} - Service time: {service_time} - Distance: {distance}"
-            )
             next_arrival_time = start_time + service_time + distance
 
             path.loc[
@@ -562,7 +556,6 @@ class TOPTWSolver:
             )
             path = self.update_path_times(path, j)
             if path is None:
-                logging.debug("Path is not feasible")
                 return None
 
             return path
@@ -610,7 +603,6 @@ class TOPTWSolver:
 
         assert type in ["first_improvement", "best_improvement"]
         total_profit = self.points_df[self.points_df["path"].notna()]["profit"].sum()
-        logging.debug(f"Total profit before the local search: {total_profit}")
         stop = False
         while not stop:
             stop = True
@@ -631,12 +623,6 @@ class TOPTWSolver:
                             if new_remaining_time > best_remaining_time:
                                 best_remaining_time = new_remaining_time
                                 best_path = new_path.copy()
-                                if (
-                                    logging.getLogger().getEffectiveLevel()
-                                    == logging.DEBUG
-                                ):
-                                    logging.debug(f"Before the swap\n{path}")
-                                    logging.debug(f"After the swap\n{new_path}")
                                 if type == "first_improvement":
                                     best_found = True
                                     break
@@ -657,7 +643,6 @@ class TOPTWSolver:
                     total_profit = new_total_profit
                     stop = False
 
-        logging.debug(f"Total profit after the local search: {new_total_profit}")
         return path_dict_list
 
     def perturbation(self, path_dict_list, consecutive_nodes, position):
@@ -691,41 +676,53 @@ class TOPTWSolver:
             path["shift"] = np.nan  # Clean the shift values from previous insertions
             # Update the path times of the node after the removed nodes
 
-            if path.loc[final_position + 1, "node_index"] == 0:
-                rollover = True
+            if path.shape[0] > 2:
+                if final_position + 1 not in path.index:
+                    assert (
+                        False
+                    ), f"Final position: {final_position} - Path size: {path.shape[0]}"
 
-                # Reset index to avoid problems with the update_path_times method
-                path.reset_index(inplace=True, drop=True)
+                if path.loc[final_position + 1, "node_index"] == 0:
+                    rollover = True
+
+                    # Reset index to avoid problems with the update_path_times method
+                    path.reset_index(inplace=True, drop=True)
+                else:
+                    arrival_time, wait_time, start_time, shift = self.update_node(
+                        path, final_position + 1
+                    )
+                    path.loc[
+                        final_position + 1,
+                        ["arrival_time", "start_time", "wait", "shift"],
+                    ] = [arrival_time, start_time, wait_time, shift]
+
+                    # Reset index to avoid problems with the update_path_times method
+                    path.reset_index(inplace=True)
+                    new_position = path[path["index"] == final_position + 1].index
+                    path = path.drop(columns=["index"])
+
+                    # Update the path times of the nodes after the removed nodes
+                    path = self.update_path_times(path, int(new_position[0]))
+
+                # Update the path times of the depot
+                if rollover:
+                    path["shift"] = (
+                        np.nan
+                    )  # Clean the shift values from previous insertions
+                    arrival_time, wait_time, start_time, shift = self.update_node(
+                        path, path.index[-2]
+                    )
+                    path.loc[
+                        path.index[-2], ["arrival_time", "start_time", "wait", "shift"]
+                    ] = [arrival_time, start_time, wait_time, shift]
+                    # Update the Max Shift of the nodes before the depot
+                    path = self.update_path_times(path, path.index[-2])
+                path_dict_list[index]["path"] = path
+
             else:
-                arrival_time, wait_time, start_time, shift = self.update_node(
-                    path, final_position + 1
-                )
-                path.loc[
-                    final_position + 1, ["arrival_time", "start_time", "wait", "shift"]
-                ] = [arrival_time, start_time, wait_time, shift]
-
-                # Reset index to avoid problems with the update_path_times method
-                path.reset_index(inplace=True)
-                new_position = path[path["index"] == final_position + 1].index
-                path = path.drop(columns=["index"])
-
-                # Update the path times of the nodes after the removed nodes
-                path = self.update_path_times(path, int(new_position[0]))
-
-            # Update the path times of the depot
-            if rollover:
-                path["shift"] = (
-                    np.nan
-                )  # Clean the shift values from previous insertions
-                arrival_time, wait_time, start_time, shift = self.update_node(
-                    path, path.index[-2]
-                )
-                path.loc[
-                    path.index[-2], ["arrival_time", "start_time", "wait", "shift"]
-                ] = [arrival_time, start_time, wait_time, shift]
-                # Update the Max Shift of the nodes before the depot
-                path = self.update_path_times(path, path.index[-2])
-            path_dict_list[index]["path"] = path
+                path.loc[path.index[-1], "max_shift"] = self.Tmax
+                path.reset_index(inplace=True, drop=True)
+                path_dict_list[index]["path"] = path
 
         return path_dict_list
 
