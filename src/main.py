@@ -14,7 +14,7 @@ import sys
 
 
 INSTANCES_PATH = r"instances\pr01_10"
-METHOD_NAME = r"ITERATED_LOCAL_SEARCH"
+METHOD_NAME = r"SAILS"
 RESULTS_PATH = r".\results\\" + METHOD_NAME
 LOGGING_PATH = r".\logs\\" + METHOD_NAME
 LOGGING_LEVEL = logging.INFO
@@ -80,7 +80,7 @@ def process_instance(instance):
             logging.info(
                 f"* Parameters: solutions_count={comparison_parameters['solutions_count']}, path_count={path_count}, criteria={criteria.__name__}, random_noise={comparison_parameters['random_noise_flag']}"
             )
-            solutions = solver.ILS(
+            solutions = solver.SAILS(
                 criteria,
                 path_count,
                 comparison_parameters["solutions_count"],
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 
     logging.info("Assigning instances to workers.")
     logging.info(
-        "Please follow the progress of each worker in their respective log files...\n"
+        "Please follow the progress of each worker in their respective log file...\n"
     )
 
     # Start the spinner thread to show activity

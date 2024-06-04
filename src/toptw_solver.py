@@ -15,11 +15,20 @@ import numpy as np
 import time
 import logging
 import copy
+import random
+import math
 
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
 MAX_NO_IMPROVEMENTS = 150
-MAX_EXECUTION_TIME = 1800  # 30 minutes
+# MAX_EXECUTION_TIME = 1800  # 30 minutes
+MAX_EXECUTION_TIME = 600  # 10 minutes
+
+# Hyperparameters for the SAILS
+ALPHA = 0.75
+INITIAL_TEMPERATURE = 1000
+MAX_INNER_LOOP = 50
+LIMIT = 3
 
 
 class TOPTWSolver:
@@ -581,7 +590,7 @@ class TOPTWSolver:
         arrival_time = prev_start_time + prev_service_time + prev_distance
         return arrival_time
 
-    def local_search(self, path_dict_list, type="best_improvement"):
+    def local_search(self, path_dict_list, type="first_improvement"):
         """
         Perform a local search to improve the constructed paths.
 
@@ -898,6 +907,166 @@ class TOPTWSolver:
                 elapsed_time = time.time() - start_time
 
             logging.info(f"\t\t * ILS solution score: {best_solution_score}")
+            new_solution = best_solution
+
+            self.points_df["path"] = None
+
+            # Update points_df with the best solution
+            for path_dict in new_solution:
+                path = path_dict["path"]
+                path_nodes = path["node_index"].values.tolist()
+                self.points_df.loc[path_nodes, "path"] = path_dict["path_index"]
+            self.points_df.loc[0, "arrival_time"] = "all"
+
+            # Selected nodes for each path
+            solution_paths = []
+            for path_dict in new_solution:
+                solution_paths.append(path_dict["path"]["node_index"].values.tolist())
+            solutions_list.append(
+                self.get_solution_metrics(s_idx, start_time, solution_paths)
+            )
+
+        solutions_df = pd.DataFrame(solutions_list)
+        solutions = Solutions(
+            self.nodes_count,
+            self.Tmax,
+            criteria,
+            paths_count,
+            solutions_count,
+            enable_random,
+            self.upper_bound,
+            solutions_df,
+            self.filename,
+        )
+        return solutions
+
+    def SAILS(self, criteria, paths_count=1, solutions_count=10, enable_random=False):
+        """
+        Implements the Simulated Annealing Iterated Local Search (SAILS) algorithm for solving the TOPTW problem.
+        Args:
+            criteria (str): The criteria used for constructing the paths.
+            paths_count (int, optional): The number of paths to construct. Defaults to 1.
+            solutions_count (int, optional): The number of solutions to generate. Defaults to 10.
+            enable_random (bool, optional): Flag to enable random selection of paths. Defaults to False.
+
+        Returns:
+            Solutions: An object containing the generated solutions.
+
+        Note:
+            Based on the works of:
+            - https://doi.org/10.1016/j.cor.2009.03.00  8 "Iterated local search for the team orienteering problem with time windows"
+            - https://doi.org/10.1057/s41274-017-0244-1 "Well-tuned algorithms for the Team Orienteering Problem with Time Windows"
+        """
+
+        solutions_list = []
+        for s_idx in range(solutions_count):
+            logging.info(f"\t Solution #{s_idx + 1}")
+            start_time = time.time()  # Start timing the execution
+
+            new_solution = self.initialize_paths(paths_count)
+
+            new_solution = self.constructive_method(
+                criteria, new_solution, enable_random
+            )
+            constructive_score = self.points_df[self.points_df["path"].notna()][
+                "profit"
+            ].sum()
+            logging.info(
+                f"\t\t * Constructive method solution score: {constructive_score}"
+            )
+
+            best_solution = copy.deepcopy(new_solution)
+            best_solution_score = constructive_score
+
+            starting_solution = copy.deepcopy(new_solution)
+            starting_solution_score = constructive_score
+
+            temperature = INITIAL_TEMPERATURE
+            no_improvement = 0
+
+            elapsed_time = time.time() - start_time
+            while elapsed_time < MAX_EXECUTION_TIME:
+                inner_loop = 0
+                position = 1
+                consecutive_nodes = 1
+                while inner_loop < MAX_INNER_LOOP:
+                    # Perturbation
+                    new_solution = self.perturbation(
+                        new_solution, consecutive_nodes, position
+                    )
+
+                    position = position + consecutive_nodes
+                    consecutive_nodes += 1
+                    path_sizes = [path["path"].shape[0] for path in new_solution]
+                    if position > min(path_sizes) - 2:
+                        position = position - min(path_sizes) + 2
+
+                    if consecutive_nodes >= max(path_sizes) - 2:
+                        consecutive_nodes = 1
+                    # End of perturbation
+
+                    # Local Search
+                    new_solution = self.local_search(new_solution)
+
+                    new_solution_score = self.points_df[self.points_df["path"].notna()][
+                        "profit"
+                    ].sum()
+                    logging.debug(f"\t\t * LS solution score: {new_solution_score}")
+
+                    delta = new_solution_score - starting_solution_score
+                    logging.debug(f"\t\t * Delta: {delta}")
+
+                    # Simulated Annealing
+                    if delta > 0:
+                        logging.debug(
+                            f"\t\t * Accepting new solution as starting solution"
+                        )
+                        starting_solution = copy.deepcopy(new_solution)
+                        starting_solution_score = new_solution_score
+                        if new_solution_score > best_solution_score:
+                            logging.debug(
+                                f"\t\t * Accepting new solution as best solution"
+                            )
+                            best_solution = copy.deepcopy(new_solution)
+                            best_solution_score = new_solution_score
+                            no_improvement = 0
+                        else:
+                            no_improvement += 1
+                    else:
+                        logging.debug(f"\t\t * Accepting new solution with probability")
+                        if random.random() < math.exp(delta / temperature):
+                            logging.debug(
+                                f"\t\t * New solution accepted with probability"
+                            )
+                            starting_solution = copy.deepcopy(new_solution)
+                            starting_solution_score = new_solution_score
+                        else:
+                            logging.debug(
+                                f"\t\t * New solution rejected with probability"
+                            )
+                            new_solution = copy.deepcopy(starting_solution)
+                            new_solution_score = starting_solution_score
+                        no_improvement += 1
+                    inner_loop += 1
+
+                temperature = temperature * ALPHA
+                logging.debug(f"\t\t * Temperature: {temperature}")
+                if no_improvement >= LIMIT:
+                    logging.debug(
+                        f"\t\t * No improvement for {no_improvement} iterations"
+                    )
+                    logging.debug(f"\t\t * Restarting from best solution")
+                    new_solution = copy.deepcopy(best_solution)
+                    new_solution_score = best_solution_score
+
+                    starting_solution = copy.deepcopy(best_solution)
+                    starting_solution_score = best_solution_score
+
+                    no_improvement = 0
+
+                elapsed_time = time.time() - start_time
+
+            logging.info(f"\t\t * SAILS solution score: {best_solution_score}")
             new_solution = best_solution
 
             self.points_df["path"] = None
