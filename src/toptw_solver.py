@@ -21,8 +21,8 @@ import math
 # Hyperparameters for the ILS
 FEASIBLE_CANDIDATES = 5
 MAX_NO_IMPROVEMENTS = 150
-# MAX_EXECUTION_TIME = 1800  # 30 minutes
-MAX_EXECUTION_TIME = 600  # 10 minutes
+MAX_EXECUTION_TIME = 1800  # 30 minutes
+# MAX_EXECUTION_TIME = 600  # 10 minutes
 
 # Hyperparameters for the SAILS
 ALPHA = 0.75
@@ -1046,6 +1046,7 @@ class TOPTWSolver:
                             )
                             new_solution = copy.deepcopy(starting_solution)
                             new_solution_score = starting_solution_score
+                            self.initialize_path_mapping(starting_solution)
                         no_improvement += 1
                     inner_loop += 1
 
@@ -1058,6 +1059,7 @@ class TOPTWSolver:
                     logging.debug(f"\t\t * Restarting from best solution")
                     new_solution = copy.deepcopy(best_solution)
                     new_solution_score = best_solution_score
+                    self.initialize_path_mapping(new_solution)
 
                     starting_solution = copy.deepcopy(best_solution)
                     starting_solution_score = best_solution_score
@@ -1069,14 +1071,7 @@ class TOPTWSolver:
             logging.info(f"\t\t * SAILS solution score: {best_solution_score}")
             new_solution = best_solution
 
-            self.points_df["path"] = None
-
-            # Update points_df with the best solution
-            for path_dict in new_solution:
-                path = path_dict["path"]
-                path_nodes = path["node_index"].values.tolist()
-                self.points_df.loc[path_nodes, "path"] = path_dict["path_index"]
-            self.points_df.loc[0, "arrival_time"] = "all"
+            self.initialize_path_mapping(new_solution)
 
             # Selected nodes for each path
             solution_paths = []
@@ -1099,3 +1094,13 @@ class TOPTWSolver:
             self.filename,
         )
         return solutions
+
+    def initialize_path_mapping(self, solution):
+        self.points_df["path"] = None
+
+            # Update points_df with the best solution
+        for path_dict in solution:
+            path = path_dict["path"]
+            path_nodes = path["node_index"].values.tolist()
+            self.points_df.loc[path_nodes, "path"] = path_dict["path_index"]
+        self.points_df.loc[0, "arrival_time"] = "all"
