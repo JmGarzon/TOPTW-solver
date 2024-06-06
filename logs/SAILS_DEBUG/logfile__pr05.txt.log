@@ -1,0 +1,532 @@
+2024-06-03 20:16:40,204 - INFO - Starting TOPTW Solver: ILS Method
+
+
+2024-06-03 20:16:40,207 - INFO - ----------------------------------------
+2024-06-03 20:16:40,207 - INFO - Processing: pr05.txt - N: 240 - T_max: 1000.0
+2024-06-03 20:16:40,207 - INFO - ----------------------------------------
+2024-06-03 20:16:40,208 - INFO - * Parameters: solutions_count=1, path_count=1, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 20:16:40,208 - INFO - 	 Solution #1
+2024-06-03 20:17:01,907 - INFO - 		 * Constructive method solution score: 421.0
+2024-06-03 20:17:19,037 - DEBUG - 		 * LS solution score: 429.0
+2024-06-03 20:17:19,039 - DEBUG - 		 * Delta: 8.0
+2024-06-03 20:17:19,039 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:17:19,039 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:17:30,041 - DEBUG - 		 * LS solution score: 431.0
+2024-06-03 20:17:30,041 - DEBUG - 		 * Delta: 2.0
+2024-06-03 20:17:30,041 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:17:30,041 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:17:41,922 - DEBUG - 		 * LS solution score: 431.0
+2024-06-03 20:17:41,922 - DEBUG - 		 * Delta: 0.0
+2024-06-03 20:17:41,922 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:17:41,922 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:17:58,848 - DEBUG - 		 * LS solution score: 432.0
+2024-06-03 20:17:58,848 - DEBUG - 		 * Delta: 1.0
+2024-06-03 20:17:58,849 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:17:58,849 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:18:16,008 - DEBUG - 		 * LS solution score: 413.0
+2024-06-03 20:18:16,008 - DEBUG - 		 * Delta: -19.0
+2024-06-03 20:18:16,008 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:18:16,008 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:18:35,161 - DEBUG - 		 * LS solution score: 453.0
+2024-06-03 20:18:35,161 - DEBUG - 		 * Delta: 40.0
+2024-06-03 20:18:35,161 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:18:35,161 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:18:54,569 - DEBUG - 		 * LS solution score: 441.0
+2024-06-03 20:18:54,569 - DEBUG - 		 * Delta: -12.0
+2024-06-03 20:18:54,569 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:18:54,569 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:19:15,053 - DEBUG - 		 * LS solution score: 421.0
+2024-06-03 20:19:15,053 - DEBUG - 		 * Delta: -20.0
+2024-06-03 20:19:15,053 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:19:15,053 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:19:37,387 - DEBUG - 		 * LS solution score: 436.0
+2024-06-03 20:19:37,387 - DEBUG - 		 * Delta: 15.0
+2024-06-03 20:19:37,387 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:19:57,697 - DEBUG - 		 * LS solution score: 449.0
+2024-06-03 20:19:57,697 - DEBUG - 		 * Delta: 13.0
+2024-06-03 20:19:57,697 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:20:15,409 - DEBUG - 		 * LS solution score: 430.0
+2024-06-03 20:20:15,409 - DEBUG - 		 * Delta: -19.0
+2024-06-03 20:20:15,409 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:20:15,409 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:20:35,795 - DEBUG - 		 * LS solution score: 420.0
+2024-06-03 20:20:35,796 - DEBUG - 		 * Delta: -10.0
+2024-06-03 20:20:35,796 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:20:35,796 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:20:44,435 - DEBUG - 		 * LS solution score: 420.0
+2024-06-03 20:20:44,435 - DEBUG - 		 * Delta: 0.0
+2024-06-03 20:20:44,436 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:20:44,436 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:20:57,073 - DEBUG - 		 * LS solution score: 439.0
+2024-06-03 20:20:57,073 - DEBUG - 		 * Delta: 19.0
+2024-06-03 20:20:57,073 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:21:13,916 - DEBUG - 		 * LS solution score: 457.0
+2024-06-03 20:21:13,916 - DEBUG - 		 * Delta: 18.0
+2024-06-03 20:21:13,916 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:21:13,916 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:21:24,949 - DEBUG - 		 * LS solution score: 444.0
+2024-06-03 20:21:24,949 - DEBUG - 		 * Delta: -13.0
+2024-06-03 20:21:24,949 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:21:24,949 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:21:44,971 - DEBUG - 		 * LS solution score: 451.0
+2024-06-03 20:21:44,971 - DEBUG - 		 * Delta: 7.0
+2024-06-03 20:21:44,971 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:22:14,318 - DEBUG - 		 * LS solution score: 463.0
+2024-06-03 20:22:14,318 - DEBUG - 		 * Delta: 12.0
+2024-06-03 20:22:14,318 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:22:14,318 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:22:40,858 - DEBUG - 		 * LS solution score: 485.0
+2024-06-03 20:22:40,858 - DEBUG - 		 * Delta: 22.0
+2024-06-03 20:22:40,858 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:22:40,858 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:23:01,126 - DEBUG - 		 * LS solution score: 472.0
+2024-06-03 20:23:01,126 - DEBUG - 		 * Delta: -13.0
+2024-06-03 20:23:01,126 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:23:01,127 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:23:25,312 - DEBUG - 		 * LS solution score: 484.0
+2024-06-03 20:23:25,312 - DEBUG - 		 * Delta: 12.0
+2024-06-03 20:23:25,312 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:23:41,862 - DEBUG - 		 * LS solution score: 419.0
+2024-06-03 20:23:41,863 - DEBUG - 		 * Delta: -65.0
+2024-06-03 20:23:41,863 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:23:41,863 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:23:56,949 - DEBUG - 		 * LS solution score: 380.0
+2024-06-03 20:23:56,949 - DEBUG - 		 * Delta: -39.0
+2024-06-03 20:23:56,949 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:23:56,949 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:24:26,515 - DEBUG - 		 * LS solution score: 431.0
+2024-06-03 20:24:26,515 - DEBUG - 		 * Delta: 51.0
+2024-06-03 20:24:26,515 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:24:42,252 - DEBUG - 		 * LS solution score: 443.0
+2024-06-03 20:24:42,252 - DEBUG - 		 * Delta: 12.0
+2024-06-03 20:24:42,252 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:24:54,232 - DEBUG - 		 * LS solution score: 445.0
+2024-06-03 20:24:54,232 - DEBUG - 		 * Delta: 2.0
+2024-06-03 20:24:54,232 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:25:07,837 - DEBUG - 		 * LS solution score: 458.0
+2024-06-03 20:25:07,837 - DEBUG - 		 * Delta: 13.0
+2024-06-03 20:25:07,837 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:25:25,287 - DEBUG - 		 * LS solution score: 456.0
+2024-06-03 20:25:25,287 - DEBUG - 		 * Delta: -2.0
+2024-06-03 20:25:25,287 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:25:25,287 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:25:46,560 - DEBUG - 		 * LS solution score: 462.0
+2024-06-03 20:25:46,560 - DEBUG - 		 * Delta: 6.0
+2024-06-03 20:25:46,560 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:25:49,776 - DEBUG - 		 * LS solution score: 372.0
+2024-06-03 20:25:49,776 - DEBUG - 		 * Delta: -90.0
+2024-06-03 20:25:49,776 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:25:49,776 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:26:07,641 - DEBUG - 		 * LS solution score: 412.0
+2024-06-03 20:26:07,641 - DEBUG - 		 * Delta: 40.0
+2024-06-03 20:26:07,641 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:26:23,337 - DEBUG - 		 * LS solution score: 399.0
+2024-06-03 20:26:23,337 - DEBUG - 		 * Delta: -13.0
+2024-06-03 20:26:23,337 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:26:23,337 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:26:52,211 - DEBUG - 		 * LS solution score: 478.0
+2024-06-03 20:26:52,211 - DEBUG - 		 * Delta: 79.0
+2024-06-03 20:26:52,211 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:27:23,357 - DEBUG - 		 * LS solution score: 506.0
+2024-06-03 20:27:23,358 - DEBUG - 		 * Delta: 28.0
+2024-06-03 20:27:23,358 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:27:23,358 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:27:49,173 - DEBUG - 		 * LS solution score: 479.0
+2024-06-03 20:27:49,173 - DEBUG - 		 * Delta: -27.0
+2024-06-03 20:27:49,173 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:27:49,173 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:28:04,658 - DEBUG - 		 * LS solution score: 417.0
+2024-06-03 20:28:04,658 - DEBUG - 		 * Delta: -62.0
+2024-06-03 20:28:04,658 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:28:04,658 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:28:24,589 - DEBUG - 		 * LS solution score: 417.0
+2024-06-03 20:28:24,589 - DEBUG - 		 * Delta: 0.0
+2024-06-03 20:28:24,589 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:28:24,589 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:28:36,083 - DEBUG - 		 * LS solution score: 449.0
+2024-06-03 20:28:36,083 - DEBUG - 		 * Delta: 32.0
+2024-06-03 20:28:36,083 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:28:48,033 - DEBUG - 		 * LS solution score: 450.0
+2024-06-03 20:28:48,033 - DEBUG - 		 * Delta: 1.0
+2024-06-03 20:28:48,033 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:29:03,182 - DEBUG - 		 * LS solution score: 471.0
+2024-06-03 20:29:03,182 - DEBUG - 		 * Delta: 21.0
+2024-06-03 20:29:03,182 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:29:18,071 - DEBUG - 		 * LS solution score: 456.0
+2024-06-03 20:29:18,071 - DEBUG - 		 * Delta: -15.0
+2024-06-03 20:29:18,071 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:29:18,071 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:29:36,951 - DEBUG - 		 * LS solution score: 463.0
+2024-06-03 20:29:36,951 - DEBUG - 		 * Delta: 7.0
+2024-06-03 20:29:36,951 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:29:56,967 - DEBUG - 		 * LS solution score: 481.0
+2024-06-03 20:29:56,967 - DEBUG - 		 * Delta: 18.0
+2024-06-03 20:29:56,967 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:30:16,210 - DEBUG - 		 * LS solution score: 493.0
+2024-06-03 20:30:16,210 - DEBUG - 		 * Delta: 12.0
+2024-06-03 20:30:16,210 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:30:37,538 - DEBUG - 		 * LS solution score: 492.0
+2024-06-03 20:30:37,538 - DEBUG - 		 * Delta: -1.0
+2024-06-03 20:30:37,538 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:30:37,538 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:30:59,658 - DEBUG - 		 * LS solution score: 484.0
+2024-06-03 20:30:59,659 - DEBUG - 		 * Delta: -8.0
+2024-06-03 20:30:59,659 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:30:59,659 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:31:24,008 - DEBUG - 		 * LS solution score: 457.0
+2024-06-03 20:31:24,008 - DEBUG - 		 * Delta: -27.0
+2024-06-03 20:31:24,008 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:31:24,008 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:31:43,271 - DEBUG - 		 * LS solution score: 446.0
+2024-06-03 20:31:43,271 - DEBUG - 		 * Delta: -11.0
+2024-06-03 20:31:43,271 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:31:43,271 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:32:15,197 - DEBUG - 		 * LS solution score: 482.0
+2024-06-03 20:32:15,197 - DEBUG - 		 * Delta: 36.0
+2024-06-03 20:32:15,197 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:32:34,011 - DEBUG - 		 * LS solution score: 441.0
+2024-06-03 20:32:34,012 - DEBUG - 		 * Delta: -41.0
+2024-06-03 20:32:34,012 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:32:34,012 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:32:34,012 - DEBUG - 		 * Temperature: 750.0
+2024-06-03 20:32:34,012 - DEBUG - 		 * No improvement for 16 iterations
+2024-06-03 20:32:34,012 - DEBUG - 		 * Restarting from best solution
+2024-06-03 20:32:34,012 - INFO - 		 * SAILS solution score: 506.0
+2024-06-03 20:32:34,014 - INFO - 	 Solution # 1 Score: 506.0 - GAP: 84.90% - Time: 953.80s
+
+2024-06-03 20:32:34,017 - INFO - 	 - TSV file saved at: .\results\\SAILS\pr05_cbenefit_insertion_ratio_p1_m1_rTrue.tsv
+
+2024-06-03 20:32:34,017 - INFO - * Parameters: solutions_count=1, path_count=2, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 20:32:34,017 - INFO - 	 Solution #1
+2024-06-03 20:33:59,890 - INFO - 		 * Constructive method solution score: 916.0
+2024-06-03 20:34:49,219 - DEBUG - 		 * LS solution score: 936.0
+2024-06-03 20:34:49,219 - DEBUG - 		 * Delta: 20.0
+2024-06-03 20:34:49,219 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:34:49,219 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:35:24,920 - DEBUG - 		 * LS solution score: 941.0
+2024-06-03 20:35:24,920 - DEBUG - 		 * Delta: 5.0
+2024-06-03 20:35:24,920 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:35:24,920 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:35:59,248 - DEBUG - 		 * LS solution score: 943.0
+2024-06-03 20:35:59,248 - DEBUG - 		 * Delta: 2.0
+2024-06-03 20:35:59,248 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:35:59,248 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 20:36:42,864 - DEBUG - 		 * LS solution score: 929.0
+2024-06-03 20:36:42,864 - DEBUG - 		 * Delta: -14.0
+2024-06-03 20:36:42,864 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:36:42,864 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:37:29,443 - DEBUG - 		 * LS solution score: 914.0
+2024-06-03 20:37:29,443 - DEBUG - 		 * Delta: -15.0
+2024-06-03 20:37:29,443 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:37:29,444 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:38:48,704 - DEBUG - 		 * LS solution score: 898.0
+2024-06-03 20:38:48,704 - DEBUG - 		 * Delta: -16.0
+2024-06-03 20:38:48,704 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:38:48,704 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:39:44,687 - DEBUG - 		 * LS solution score: 896.0
+2024-06-03 20:39:44,687 - DEBUG - 		 * Delta: -2.0
+2024-06-03 20:39:44,687 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:39:44,688 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:40:52,644 - DEBUG - 		 * LS solution score: 904.0
+2024-06-03 20:40:52,644 - DEBUG - 		 * Delta: 8.0
+2024-06-03 20:40:52,644 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:41:55,048 - DEBUG - 		 * LS solution score: 939.0
+2024-06-03 20:41:55,048 - DEBUG - 		 * Delta: 35.0
+2024-06-03 20:41:55,048 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:42:56,640 - DEBUG - 		 * LS solution score: 918.0
+2024-06-03 20:42:56,640 - DEBUG - 		 * Delta: -21.0
+2024-06-03 20:42:56,640 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:42:56,640 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:44:00,540 - DEBUG - 		 * LS solution score: 816.0
+2024-06-03 20:44:00,540 - DEBUG - 		 * Delta: -102.0
+2024-06-03 20:44:00,540 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:44:00,540 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:45:21,453 - DEBUG - 		 * LS solution score: 873.0
+2024-06-03 20:45:21,453 - DEBUG - 		 * Delta: 57.0
+2024-06-03 20:45:21,453 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:46:11,205 - DEBUG - 		 * LS solution score: 892.0
+2024-06-03 20:46:11,205 - DEBUG - 		 * Delta: 19.0
+2024-06-03 20:46:11,205 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:46:44,170 - DEBUG - 		 * LS solution score: 892.0
+2024-06-03 20:46:44,170 - DEBUG - 		 * Delta: 0.0
+2024-06-03 20:46:44,170 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:46:44,171 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:47:33,391 - DEBUG - 		 * LS solution score: 896.0
+2024-06-03 20:47:33,392 - DEBUG - 		 * Delta: 4.0
+2024-06-03 20:47:33,392 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:48:23,004 - DEBUG - 		 * LS solution score: 912.0
+2024-06-03 20:48:23,004 - DEBUG - 		 * Delta: 16.0
+2024-06-03 20:48:23,004 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:49:29,440 - DEBUG - 		 * LS solution score: 889.0
+2024-06-03 20:49:29,440 - DEBUG - 		 * Delta: -23.0
+2024-06-03 20:49:29,440 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:49:29,440 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:50:18,049 - DEBUG - 		 * LS solution score: 873.0
+2024-06-03 20:50:18,049 - DEBUG - 		 * Delta: -16.0
+2024-06-03 20:50:18,049 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:50:18,049 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:51:33,520 - DEBUG - 		 * LS solution score: 911.0
+2024-06-03 20:51:33,520 - DEBUG - 		 * Delta: 38.0
+2024-06-03 20:51:33,520 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:52:39,038 - DEBUG - 		 * LS solution score: 915.0
+2024-06-03 20:52:39,038 - DEBUG - 		 * Delta: 4.0
+2024-06-03 20:52:39,038 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:53:54,491 - DEBUG - 		 * LS solution score: 922.0
+2024-06-03 20:53:54,491 - DEBUG - 		 * Delta: 7.0
+2024-06-03 20:53:54,491 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:55:24,136 - DEBUG - 		 * LS solution score: 895.0
+2024-06-03 20:55:24,136 - DEBUG - 		 * Delta: -27.0
+2024-06-03 20:55:24,136 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:55:24,136 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:56:35,637 - DEBUG - 		 * LS solution score: 847.0
+2024-06-03 20:56:35,637 - DEBUG - 		 * Delta: -48.0
+2024-06-03 20:56:35,637 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:56:35,637 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:57:48,242 - DEBUG - 		 * LS solution score: 816.0
+2024-06-03 20:57:48,242 - DEBUG - 		 * Delta: -31.0
+2024-06-03 20:57:48,242 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:57:48,242 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 20:59:11,648 - DEBUG - 		 * LS solution score: 829.0
+2024-06-03 20:59:11,649 - DEBUG - 		 * Delta: 13.0
+2024-06-03 20:59:11,649 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 20:59:37,419 - DEBUG - 		 * LS solution score: 829.0
+2024-06-03 20:59:37,419 - DEBUG - 		 * Delta: 0.0
+2024-06-03 20:59:37,419 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 20:59:37,419 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:00:07,659 - DEBUG - 		 * LS solution score: 829.0
+2024-06-03 21:00:07,660 - DEBUG - 		 * Delta: 0.0
+2024-06-03 21:00:07,660 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:00:07,660 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:00:53,312 - DEBUG - 		 * LS solution score: 848.0
+2024-06-03 21:00:53,313 - DEBUG - 		 * Delta: 19.0
+2024-06-03 21:00:53,313 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:01:37,269 - DEBUG - 		 * LS solution score: 848.0
+2024-06-03 21:01:37,269 - DEBUG - 		 * Delta: 0.0
+2024-06-03 21:01:37,269 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:01:37,269 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:02:31,025 - DEBUG - 		 * LS solution score: 834.0
+2024-06-03 21:02:31,025 - DEBUG - 		 * Delta: -14.0
+2024-06-03 21:02:31,025 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:02:31,025 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:03:18,968 - DEBUG - 		 * LS solution score: 871.0
+2024-06-03 21:03:18,968 - DEBUG - 		 * Delta: 37.0
+2024-06-03 21:03:18,968 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:04:28,609 - DEBUG - 		 * LS solution score: 880.0
+2024-06-03 21:04:28,609 - DEBUG - 		 * Delta: 9.0
+2024-06-03 21:04:28,609 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:05:37,153 - DEBUG - 		 * LS solution score: 889.0
+2024-06-03 21:05:37,153 - DEBUG - 		 * Delta: 9.0
+2024-06-03 21:05:37,153 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:06:43,973 - DEBUG - 		 * LS solution score: 813.0
+2024-06-03 21:06:43,974 - DEBUG - 		 * Delta: -76.0
+2024-06-03 21:06:43,974 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:06:43,974 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:07:42,569 - DEBUG - 		 * LS solution score: 808.0
+2024-06-03 21:07:42,569 - DEBUG - 		 * Delta: -5.0
+2024-06-03 21:07:42,569 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:07:42,569 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:08:58,075 - DEBUG - 		 * LS solution score: 838.0
+2024-06-03 21:08:58,075 - DEBUG - 		 * Delta: 30.0
+2024-06-03 21:08:58,075 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:10:16,855 - DEBUG - 		 * LS solution score: 846.0
+2024-06-03 21:10:16,855 - DEBUG - 		 * Delta: 8.0
+2024-06-03 21:10:16,855 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:10:41,577 - DEBUG - 		 * LS solution score: 846.0
+2024-06-03 21:10:41,577 - DEBUG - 		 * Delta: 0.0
+2024-06-03 21:10:41,577 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:10:41,577 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:11:11,513 - DEBUG - 		 * LS solution score: 846.0
+2024-06-03 21:11:11,513 - DEBUG - 		 * Delta: 0.0
+2024-06-03 21:11:11,513 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:11:11,513 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:11:45,505 - DEBUG - 		 * LS solution score: 826.0
+2024-06-03 21:11:45,505 - DEBUG - 		 * Delta: -20.0
+2024-06-03 21:11:45,505 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:11:45,505 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:12:34,468 - DEBUG - 		 * LS solution score: 844.0
+2024-06-03 21:12:34,468 - DEBUG - 		 * Delta: 18.0
+2024-06-03 21:12:34,468 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:13:16,328 - DEBUG - 		 * LS solution score: 890.0
+2024-06-03 21:13:16,328 - DEBUG - 		 * Delta: 46.0
+2024-06-03 21:13:16,328 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:14:01,833 - DEBUG - 		 * LS solution score: 889.0
+2024-06-03 21:14:01,833 - DEBUG - 		 * Delta: -1.0
+2024-06-03 21:14:01,833 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:14:01,833 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:14:47,930 - DEBUG - 		 * LS solution score: 869.0
+2024-06-03 21:14:47,930 - DEBUG - 		 * Delta: -20.0
+2024-06-03 21:14:47,931 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:14:47,931 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:15:51,017 - DEBUG - 		 * LS solution score: 855.0
+2024-06-03 21:15:51,017 - DEBUG - 		 * Delta: -14.0
+2024-06-03 21:15:51,017 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:15:51,017 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:16:42,272 - DEBUG - 		 * LS solution score: 830.0
+2024-06-03 21:16:42,272 - DEBUG - 		 * Delta: -25.0
+2024-06-03 21:16:42,272 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:16:42,272 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:17:41,725 - DEBUG - 		 * LS solution score: 850.0
+2024-06-03 21:17:41,725 - DEBUG - 		 * Delta: 20.0
+2024-06-03 21:17:41,725 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:18:51,772 - DEBUG - 		 * LS solution score: 861.0
+2024-06-03 21:18:51,772 - DEBUG - 		 * Delta: 11.0
+2024-06-03 21:18:51,772 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:19:55,202 - DEBUG - 		 * LS solution score: 805.0
+2024-06-03 21:19:55,202 - DEBUG - 		 * Delta: -56.0
+2024-06-03 21:19:55,202 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:19:55,202 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:20:17,451 - DEBUG - 		 * LS solution score: 805.0
+2024-06-03 21:20:17,451 - DEBUG - 		 * Delta: 0.0
+2024-06-03 21:20:17,451 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:20:17,451 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:20:17,451 - DEBUG - 		 * Temperature: 750.0
+2024-06-03 21:20:17,451 - DEBUG - 		 * No improvement for 47 iterations
+2024-06-03 21:20:17,451 - DEBUG - 		 * Restarting from best solution
+2024-06-03 21:20:17,452 - INFO - 		 * SAILS solution score: 943.0
+2024-06-03 21:20:17,453 - INFO - 	 Solution # 1 Score: 943.0 - GAP: 71.86% - Time: 2863.44s
+
+2024-06-03 21:20:17,454 - INFO - 	 - TSV file saved at: .\results\\SAILS\pr05_cbenefit_insertion_ratio_p2_m1_rTrue.tsv
+
+2024-06-03 21:20:17,454 - INFO - * Parameters: solutions_count=1, path_count=3, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 21:20:17,454 - INFO - 	 Solution #1
+2024-06-03 21:22:12,846 - INFO - 		 * Constructive method solution score: 1134.0
+2024-06-03 21:22:56,551 - DEBUG - 		 * LS solution score: 1157.0
+2024-06-03 21:22:56,551 - DEBUG - 		 * Delta: 23.0
+2024-06-03 21:22:56,551 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:22:56,551 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 21:23:40,164 - DEBUG - 		 * LS solution score: 1142.0
+2024-06-03 21:23:40,164 - DEBUG - 		 * Delta: -15.0
+2024-06-03 21:23:40,164 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:23:40,164 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:25:17,431 - DEBUG - 		 * LS solution score: 1193.0
+2024-06-03 21:25:17,431 - DEBUG - 		 * Delta: 51.0
+2024-06-03 21:25:17,431 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:25:17,431 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 21:26:13,757 - DEBUG - 		 * LS solution score: 1196.0
+2024-06-03 21:26:13,757 - DEBUG - 		 * Delta: 3.0
+2024-06-03 21:26:13,757 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:26:13,757 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 21:27:29,354 - DEBUG - 		 * LS solution score: 1190.0
+2024-06-03 21:27:29,354 - DEBUG - 		 * Delta: -6.0
+2024-06-03 21:27:29,354 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:27:29,354 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:28:47,918 - DEBUG - 		 * LS solution score: 1189.0
+2024-06-03 21:28:47,919 - DEBUG - 		 * Delta: -1.0
+2024-06-03 21:28:47,919 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:28:47,919 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:30:15,290 - DEBUG - 		 * LS solution score: 1211.0
+2024-06-03 21:30:15,290 - DEBUG - 		 * Delta: 22.0
+2024-06-03 21:30:15,290 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:30:15,290 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 21:31:55,608 - DEBUG - 		 * LS solution score: 1142.0
+2024-06-03 21:31:55,609 - DEBUG - 		 * Delta: -69.0
+2024-06-03 21:31:55,609 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:31:55,609 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:33:28,282 - DEBUG - 		 * LS solution score: 1128.0
+2024-06-03 21:33:28,282 - DEBUG - 		 * Delta: -14.0
+2024-06-03 21:33:28,282 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:33:28,282 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:35:49,802 - DEBUG - 		 * LS solution score: 1221.0
+2024-06-03 21:35:49,802 - DEBUG - 		 * Delta: 93.0
+2024-06-03 21:35:49,802 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:35:49,802 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 21:37:38,428 - DEBUG - 		 * LS solution score: 1200.0
+2024-06-03 21:37:38,428 - DEBUG - 		 * Delta: -21.0
+2024-06-03 21:37:38,428 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:37:38,428 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:40:19,760 - DEBUG - 		 * LS solution score: 1220.0
+2024-06-03 21:40:19,760 - DEBUG - 		 * Delta: 20.0
+2024-06-03 21:40:19,760 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:41:15,877 - DEBUG - 		 * LS solution score: 1196.0
+2024-06-03 21:41:15,877 - DEBUG - 		 * Delta: -24.0
+2024-06-03 21:41:15,877 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:41:15,877 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:42:21,104 - DEBUG - 		 * LS solution score: 1218.0
+2024-06-03 21:42:21,104 - DEBUG - 		 * Delta: 22.0
+2024-06-03 21:42:21,104 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:43:33,400 - DEBUG - 		 * LS solution score: 1217.0
+2024-06-03 21:43:33,401 - DEBUG - 		 * Delta: -1.0
+2024-06-03 21:43:33,401 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:43:33,401 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:44:48,663 - DEBUG - 		 * LS solution score: 1196.0
+2024-06-03 21:44:48,663 - DEBUG - 		 * Delta: -21.0
+2024-06-03 21:44:48,663 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:44:48,663 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:46:08,262 - DEBUG - 		 * LS solution score: 1212.0
+2024-06-03 21:46:08,262 - DEBUG - 		 * Delta: 16.0
+2024-06-03 21:46:08,262 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:47:47,135 - DEBUG - 		 * LS solution score: 1199.0
+2024-06-03 21:47:47,135 - DEBUG - 		 * Delta: -13.0
+2024-06-03 21:47:47,135 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:47:47,135 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:49:30,821 - DEBUG - 		 * LS solution score: 1161.0
+2024-06-03 21:49:30,821 - DEBUG - 		 * Delta: -38.0
+2024-06-03 21:49:30,821 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:49:30,821 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:51:15,790 - DEBUG - 		 * LS solution score: 1140.0
+2024-06-03 21:51:15,790 - DEBUG - 		 * Delta: -21.0
+2024-06-03 21:51:15,790 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:51:15,790 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:53:10,941 - DEBUG - 		 * LS solution score: 1263.0
+2024-06-03 21:53:10,941 - DEBUG - 		 * Delta: 123.0
+2024-06-03 21:53:10,941 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:53:10,941 - DEBUG - 		 * Accepting new solution as best solution
+2024-06-03 21:54:58,902 - DEBUG - 		 * LS solution score: 1188.0
+2024-06-03 21:54:58,902 - DEBUG - 		 * Delta: -75.0
+2024-06-03 21:54:58,902 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:54:58,903 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:56:46,556 - DEBUG - 		 * LS solution score: 1125.0
+2024-06-03 21:56:46,556 - DEBUG - 		 * Delta: -63.0
+2024-06-03 21:56:46,556 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 21:56:46,556 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 21:59:09,168 - DEBUG - 		 * LS solution score: 1160.0
+2024-06-03 21:59:09,168 - DEBUG - 		 * Delta: 35.0
+2024-06-03 21:59:09,168 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 21:59:50,620 - DEBUG - 		 * LS solution score: 1168.0
+2024-06-03 21:59:50,620 - DEBUG - 		 * Delta: 8.0
+2024-06-03 21:59:50,620 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 22:00:37,698 - DEBUG - 		 * LS solution score: 1180.0
+2024-06-03 22:00:37,698 - DEBUG - 		 * Delta: 12.0
+2024-06-03 22:00:37,698 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 22:01:44,411 - DEBUG - 		 * LS solution score: 1166.0
+2024-06-03 22:01:44,411 - DEBUG - 		 * Delta: -14.0
+2024-06-03 22:01:44,411 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 22:01:44,411 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 22:03:06,920 - DEBUG - 		 * LS solution score: 1204.0
+2024-06-03 22:03:06,920 - DEBUG - 		 * Delta: 38.0
+2024-06-03 22:03:06,920 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 22:04:32,424 - DEBUG - 		 * LS solution score: 1225.0
+2024-06-03 22:04:32,424 - DEBUG - 		 * Delta: 21.0
+2024-06-03 22:04:32,424 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 22:06:24,264 - DEBUG - 		 * LS solution score: 1257.0
+2024-06-03 22:06:24,265 - DEBUG - 		 * Delta: 32.0
+2024-06-03 22:06:24,265 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 22:07:47,849 - DEBUG - 		 * LS solution score: 1228.0
+2024-06-03 22:07:47,849 - DEBUG - 		 * Delta: -29.0
+2024-06-03 22:07:47,849 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 22:07:47,849 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 22:09:08,542 - DEBUG - 		 * LS solution score: 1200.0
+2024-06-03 22:09:08,542 - DEBUG - 		 * Delta: -28.0
+2024-06-03 22:09:08,542 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 22:09:08,542 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 22:11:04,932 - DEBUG - 		 * LS solution score: 1185.0
+2024-06-03 22:11:04,932 - DEBUG - 		 * Delta: -15.0
+2024-06-03 22:11:04,932 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 22:11:04,933 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 22:13:12,008 - DEBUG - 		 * LS solution score: 1258.0
+2024-06-03 22:13:12,008 - DEBUG - 		 * Delta: 73.0
+2024-06-03 22:13:12,008 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 22:15:11,955 - DEBUG - 		 * LS solution score: 1246.0
+2024-06-03 22:15:11,955 - DEBUG - 		 * Delta: -12.0
+2024-06-03 22:15:11,955 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 22:15:11,955 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 22:17:17,470 - DEBUG - 		 * LS solution score: 1247.0
+2024-06-03 22:17:17,470 - DEBUG - 		 * Delta: 1.0
+2024-06-03 22:17:17,470 - DEBUG - 		 * Accepting new solution as starting solution
+2024-06-03 22:19:30,441 - DEBUG - 		 * LS solution score: 1205.0
+2024-06-03 22:19:30,441 - DEBUG - 		 * Delta: -42.0
+2024-06-03 22:19:30,441 - DEBUG - 		 * Accepting new solution with probability
+2024-06-03 22:19:30,441 - DEBUG - 		 * New solution accepted with probability
+2024-06-03 22:21:40,905 - DEBUG - 		 * LS solution score: 1261.0
+2024-06-03 22:21:40,905 - DEBUG - 		 * Delta: 56.0
+2024-06-03 22:21:40,905 - DEBUG - 		 * Accepting new solution as starting solution

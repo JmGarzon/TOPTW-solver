@@ -1,0 +1,118 @@
+2024-06-03 23:51:44,396 - INFO - Starting TOPTW Solver: ILS Method
+
+
+2024-06-03 23:51:44,396 - INFO - ----------------------------------------
+2024-06-03 23:51:44,396 - INFO - Processing: pr02.txt - N: 96 - T_max: 1000.0
+2024-06-03 23:51:44,396 - INFO - ----------------------------------------
+2024-06-03 23:51:44,396 - INFO - * Parameters: solutions_count=5, path_count=1, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 23:51:44,396 - INFO - 	 Solution #1
+2024-06-03 23:51:49,255 - INFO - 		 * Constructive method solution score: 325.0
+2024-06-04 00:26:15,899 - INFO - 		 * SAILS solution score: 394.0
+2024-06-04 00:26:15,900 - INFO - 	 Solution # 1 Score: 394.0 - GAP: 67.70% - Time: 2071.50s
+
+2024-06-04 00:26:15,900 - INFO - 	 Solution #2
+2024-06-04 00:26:20,641 - INFO - 		 * Constructive method solution score: 326.0
+2024-06-04 00:59:13,717 - INFO - 		 * SAILS solution score: 383.0
+2024-06-04 00:59:13,718 - INFO - 	 Solution # 2 Score: 383.0 - GAP: 68.61% - Time: 1977.82s
+
+2024-06-04 00:59:13,718 - INFO - 	 Solution #3
+2024-06-04 00:59:19,452 - INFO - 		 * Constructive method solution score: 360.0
+2024-06-04 01:30:44,353 - INFO - 		 * SAILS solution score: 389.0
+2024-06-04 01:30:44,354 - INFO - 	 Solution # 3 Score: 389.0 - GAP: 68.11% - Time: 1890.64s
+
+2024-06-04 01:30:44,354 - INFO - 	 Solution #4
+2024-06-04 01:30:47,744 - INFO - 		 * Constructive method solution score: 275.0
+2024-06-04 02:02:19,490 - INFO - 		 * SAILS solution score: 393.0
+2024-06-04 02:02:19,491 - INFO - 	 Solution # 4 Score: 393.0 - GAP: 67.79% - Time: 1895.14s
+
+2024-06-04 02:02:19,491 - INFO - 	 Solution #5
+2024-06-04 02:02:24,229 - INFO - 		 * Constructive method solution score: 321.0
+2024-06-04 02:33:38,031 - INFO - 		 * SAILS solution score: 384.0
+2024-06-04 02:33:38,032 - INFO - 	 Solution # 5 Score: 384.0 - GAP: 68.52% - Time: 1878.54s
+
+2024-06-04 02:33:38,036 - INFO - 	 - TSV file saved at: .\results\\SAILS\pr02_cbenefit_insertion_ratio_p1_m5_rTrue.tsv
+
+2024-06-04 02:33:38,036 - INFO - * Parameters: solutions_count=5, path_count=2, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-04 02:33:38,036 - INFO - 	 Solution #1
+2024-06-04 02:33:50,667 - INFO - 		 * Constructive method solution score: 543.0
+2024-06-04 03:06:59,498 - INFO - 		 * SAILS solution score: 676.0
+2024-06-04 03:06:59,500 - INFO - 	 Solution # 1 Score: 676.0 - GAP: 44.59% - Time: 2001.46s
+
+2024-06-04 03:06:59,500 - INFO - 	 Solution #2
+2024-06-04 03:07:12,926 - INFO - 		 * Constructive method solution score: 562.0
+2024-06-04 03:40:03,717 - INFO - 		 * SAILS solution score: 664.0
+2024-06-04 03:40:03,719 - INFO - 	 Solution # 2 Score: 664.0 - GAP: 45.57% - Time: 1984.22s
+
+2024-06-04 03:40:03,719 - INFO - 	 Solution #3
+2024-06-04 03:40:17,405 - INFO - 		 * Constructive method solution score: 567.0
+2024-06-04 04:12:41,301 - INFO - 		 * SAILS solution score: 668.0
+2024-06-04 04:12:41,302 - INFO - 	 Solution # 3 Score: 668.0 - GAP: 45.25% - Time: 1957.58s
+
+2024-06-04 04:12:41,303 - INFO - 	 Solution #4
+2024-06-04 04:12:54,154 - INFO - 		 * Constructive method solution score: 532.0
+2024-06-04 04:47:36,546 - INFO - 		 * SAILS solution score: 680.0
+2024-06-04 04:47:36,548 - INFO - 	 Solution # 4 Score: 680.0 - GAP: 44.26% - Time: 2095.24s
+
+2024-06-04 04:47:36,548 - INFO - 	 Solution #5
+2024-06-04 04:47:50,830 - INFO - 		 * Constructive method solution score: 593.0
+2024-06-04 05:20:40,139 - INFO - 		 * SAILS solution score: 669.0
+2024-06-04 05:20:40,140 - INFO - 	 Solution # 5 Score: 669.0 - GAP: 45.16% - Time: 1983.59s
+
+2024-06-04 05:20:40,141 - INFO - 	 - TSV file saved at: .\results\\SAILS\pr02_cbenefit_insertion_ratio_p2_m5_rTrue.tsv
+
+2024-06-04 05:20:40,141 - INFO - * Parameters: solutions_count=5, path_count=3, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-04 05:20:40,141 - INFO - 	 Solution #1
+2024-06-04 05:21:03,894 - INFO - 		 * Constructive method solution score: 755.0
+2024-06-04 05:56:35,323 - INFO - 		 * SAILS solution score: 860.0
+2024-06-04 05:56:35,325 - INFO - 	 Solution # 1 Score: 860.0 - GAP: 29.51% - Time: 2155.18s
+
+2024-06-04 05:56:35,325 - INFO - 	 Solution #2
+2024-06-04 05:56:58,824 - INFO - 		 * Constructive method solution score: 758.0
+2024-06-04 06:32:17,124 - INFO - 		 * SAILS solution score: 865.0
+2024-06-04 06:32:17,126 - INFO - 	 Solution # 2 Score: 865.0 - GAP: 29.10% - Time: 2141.80s
+
+2024-06-04 06:32:17,126 - INFO - 	 Solution #3
+2024-06-04 06:32:43,310 - INFO - 		 * Constructive method solution score: 806.0
+2024-06-04 07:08:51,141 - INFO - 		 * SAILS solution score: 842.0
+2024-06-04 07:08:51,143 - INFO - 	 Solution # 3 Score: 842.0 - GAP: 30.98% - Time: 2194.02s
+
+2024-06-04 07:08:51,143 - INFO - 	 Solution #4
+2024-06-04 07:09:14,653 - INFO - 		 * Constructive method solution score: 784.0
+2024-06-04 07:45:52,795 - INFO - 		 * SAILS solution score: 862.0
+2024-06-04 07:45:52,798 - INFO - 	 Solution # 4 Score: 862.0 - GAP: 29.34% - Time: 2221.65s
+
+2024-06-04 07:45:52,798 - INFO - 	 Solution #5
+2024-06-04 07:46:19,652 - INFO - 		 * Constructive method solution score: 756.0
+2024-06-04 08:22:16,316 - INFO - 		 * SAILS solution score: 854.0
+2024-06-04 08:22:16,318 - INFO - 	 Solution # 5 Score: 854.0 - GAP: 30.00% - Time: 2183.52s
+
+2024-06-04 08:22:16,320 - INFO - 	 - TSV file saved at: .\results\\SAILS\pr02_cbenefit_insertion_ratio_p3_m5_rTrue.tsv
+
+2024-06-04 08:22:16,320 - INFO - * Parameters: solutions_count=5, path_count=4, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-04 08:22:16,320 - INFO - 	 Solution #1
+2024-06-04 08:22:49,867 - INFO - 		 * Constructive method solution score: 925.0
+2024-06-04 09:07:00,294 - INFO - 		 * SAILS solution score: 1012.0
+2024-06-04 09:07:00,297 - INFO - 	 Solution # 1 Score: 1012.0 - GAP: 17.05% - Time: 2683.98s
+
+2024-06-04 09:07:00,297 - INFO - 	 Solution #2
+2024-06-04 09:07:34,348 - INFO - 		 * Constructive method solution score: 903.0
+2024-06-04 09:53:37,308 - INFO - 		 * SAILS solution score: 1003.0
+2024-06-04 09:53:37,311 - INFO - 	 Solution # 2 Score: 1003.0 - GAP: 17.79% - Time: 2797.01s
+
+2024-06-04 09:53:37,311 - INFO - 	 Solution #3
+2024-06-04 09:54:12,154 - INFO - 		 * Constructive method solution score: 958.0
+2024-06-04 10:39:08,961 - INFO - 		 * SAILS solution score: 998.0
+2024-06-04 10:39:08,963 - INFO - 	 Solution # 3 Score: 998.0 - GAP: 18.20% - Time: 2731.65s
+
+2024-06-04 10:39:08,963 - INFO - 	 Solution #4
+2024-06-04 10:39:39,329 - INFO - 		 * Constructive method solution score: 951.0
+2024-06-04 11:23:03,724 - INFO - 		 * SAILS solution score: 1007.0
+2024-06-04 11:23:03,727 - INFO - 	 Solution # 4 Score: 1007.0 - GAP: 17.46% - Time: 2634.76s
+
+2024-06-04 11:23:03,727 - INFO - 	 Solution #5
+2024-06-04 11:23:36,570 - INFO - 		 * Constructive method solution score: 936.0
+2024-06-04 12:04:06,795 - INFO - 		 * SAILS solution score: 1014.0
+2024-06-04 12:04:06,797 - INFO - 	 Solution # 5 Score: 1014.0 - GAP: 16.89% - Time: 2463.07s
+
+2024-06-04 12:04:06,799 - INFO - 	 - TSV file saved at: .\results\\SAILS\pr02_cbenefit_insertion_ratio_p4_m5_rTrue.tsv
+

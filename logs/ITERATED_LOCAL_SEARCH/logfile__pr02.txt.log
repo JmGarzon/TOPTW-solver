@@ -1,0 +1,138 @@
+2024-06-03 02:10:18,780 - INFO - Starting TOPTW Solver: ILS Method
+
+
+2024-06-03 02:10:18,783 - INFO - ----------------------------------------
+2024-06-03 02:10:18,783 - INFO - Processing: pr02.txt - N: 96 - T_max: 1000.0
+2024-06-03 02:10:18,783 - INFO - ----------------------------------------
+2024-06-03 02:10:18,783 - INFO - * Parameters: solutions_count=5, path_count=1, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 02:10:18,783 - INFO - 	 Solution #1
+2024-06-03 02:10:24,223 - INFO - 		 * Constructive method solution score: 340.0
+2024-06-03 02:10:28,433 - INFO - 		 * Local search solution score: 341.0
+2024-06-03 02:40:12,462 - INFO - 		 * ILS solution score: 391.0
+2024-06-03 02:40:12,463 - INFO - 	 Solution # 1 Score: 391.0 - GAP: 67.95% - Time: 1793.68s
+
+2024-06-03 02:40:12,463 - INFO - 	 Solution #2
+2024-06-03 02:40:18,842 - INFO - 		 * Constructive method solution score: 376.0
+2024-06-03 02:40:22,880 - INFO - 		 * Local search solution score: 381.0
+2024-06-03 03:00:16,006 - INFO - 		 * ILS solution score: 390.0
+2024-06-03 03:00:16,007 - INFO - 	 Solution # 2 Score: 390.0 - GAP: 68.03% - Time: 1203.54s
+
+2024-06-03 03:00:16,007 - INFO - 	 Solution #3
+2024-06-03 03:00:21,380 - INFO - 		 * Constructive method solution score: 341.0
+2024-06-03 03:00:27,546 - INFO - 		 * Local search solution score: 355.0
+2024-06-03 03:21:29,922 - INFO - 		 * ILS solution score: 385.0
+2024-06-03 03:21:29,923 - INFO - 	 Solution # 3 Score: 385.0 - GAP: 68.44% - Time: 1273.92s
+
+2024-06-03 03:21:29,923 - INFO - 	 Solution #4
+2024-06-03 03:21:36,239 - INFO - 		 * Constructive method solution score: 351.0
+2024-06-03 03:21:38,021 - INFO - 		 * Local search solution score: 351.0
+2024-06-03 03:49:28,705 - INFO - 		 * ILS solution score: 382.0
+2024-06-03 03:49:28,706 - INFO - 	 Solution # 4 Score: 382.0 - GAP: 68.69% - Time: 1678.78s
+
+2024-06-03 03:49:28,706 - INFO - 	 Solution #5
+2024-06-03 03:49:33,702 - INFO - 		 * Constructive method solution score: 316.0
+2024-06-03 03:49:39,265 - INFO - 		 * Local search solution score: 338.0
+2024-06-03 04:09:31,303 - INFO - 		 * ILS solution score: 385.0
+2024-06-03 04:09:31,304 - INFO - 	 Solution # 5 Score: 385.0 - GAP: 68.44% - Time: 1202.60s
+
+2024-06-03 04:09:31,309 - INFO - 	 - TSV file saved at: .\results\\ITERATED_LOCAL_SEARCH\pr02_cbenefit_insertion_ratio_p1_m5_rTrue.tsv
+
+2024-06-03 04:09:31,309 - INFO - * Parameters: solutions_count=5, path_count=2, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 04:09:31,309 - INFO - 	 Solution #1
+2024-06-03 04:09:44,237 - INFO - 		 * Constructive method solution score: 558.0
+2024-06-03 04:09:52,207 - INFO - 		 * Local search solution score: 571.0
+2024-06-03 04:39:39,531 - INFO - 		 * ILS solution score: 669.0
+2024-06-03 04:39:39,533 - INFO - 	 Solution # 1 Score: 669.0 - GAP: 45.16% - Time: 1808.22s
+
+2024-06-03 04:39:39,533 - INFO - 	 Solution #2
+2024-06-03 04:39:52,542 - INFO - 		 * Constructive method solution score: 558.0
+2024-06-03 04:40:00,370 - INFO - 		 * Local search solution score: 577.0
+2024-06-03 05:09:42,998 - INFO - 		 * ILS solution score: 671.0
+2024-06-03 05:09:43,000 - INFO - 	 Solution # 2 Score: 671.0 - GAP: 45.00% - Time: 1803.47s
+
+2024-06-03 05:09:43,000 - INFO - 	 Solution #3
+2024-06-03 05:09:56,787 - INFO - 		 * Constructive method solution score: 563.0
+2024-06-03 05:10:06,828 - INFO - 		 * Local search solution score: 581.0
+2024-06-03 05:39:51,791 - INFO - 		 * ILS solution score: 657.0
+2024-06-03 05:39:51,792 - INFO - 	 Solution # 3 Score: 657.0 - GAP: 46.15% - Time: 1808.79s
+
+2024-06-03 05:39:51,793 - INFO - 	 Solution #4
+2024-06-03 05:40:08,003 - INFO - 		 * Constructive method solution score: 619.0
+2024-06-03 05:40:11,413 - INFO - 		 * Local search solution score: 619.0
+2024-06-03 06:09:55,942 - INFO - 		 * ILS solution score: 669.0
+2024-06-03 06:09:55,944 - INFO - 	 Solution # 4 Score: 669.0 - GAP: 45.16% - Time: 1804.15s
+
+2024-06-03 06:09:55,944 - INFO - 	 Solution #5
+2024-06-03 06:10:08,080 - INFO - 		 * Constructive method solution score: 545.0
+2024-06-03 06:10:14,102 - INFO - 		 * Local search solution score: 552.0
+2024-06-03 06:40:01,674 - INFO - 		 * ILS solution score: 658.0
+2024-06-03 06:40:01,675 - INFO - 	 Solution # 5 Score: 658.0 - GAP: 46.07% - Time: 1805.73s
+
+2024-06-03 06:40:01,678 - INFO - 	 - TSV file saved at: .\results\\ITERATED_LOCAL_SEARCH\pr02_cbenefit_insertion_ratio_p2_m5_rTrue.tsv
+
+2024-06-03 06:40:01,678 - INFO - * Parameters: solutions_count=5, path_count=3, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 06:40:01,678 - INFO - 	 Solution #1
+2024-06-03 06:40:25,226 - INFO - 		 * Constructive method solution score: 772.0
+2024-06-03 06:40:35,320 - INFO - 		 * Local search solution score: 788.0
+2024-06-03 07:10:20,504 - INFO - 		 * ILS solution score: 854.0
+2024-06-03 07:10:20,507 - INFO - 	 Solution # 1 Score: 854.0 - GAP: 30.00% - Time: 1818.83s
+
+2024-06-03 07:10:20,507 - INFO - 	 Solution #2
+2024-06-03 07:10:45,170 - INFO - 		 * Constructive method solution score: 766.0
+2024-06-03 07:10:55,254 - INFO - 		 * Local search solution score: 770.0
+2024-06-03 07:40:37,835 - INFO - 		 * ILS solution score: 841.0
+2024-06-03 07:40:37,838 - INFO - 	 Solution # 2 Score: 841.0 - GAP: 31.07% - Time: 1817.33s
+
+2024-06-03 07:40:37,838 - INFO - 	 Solution #3
+2024-06-03 07:41:01,367 - INFO - 		 * Constructive method solution score: 767.0
+2024-06-03 07:41:16,964 - INFO - 		 * Local search solution score: 790.0
+2024-06-03 08:10:46,360 - INFO - 		 * ILS solution score: 884.0
+2024-06-03 08:10:46,363 - INFO - 	 Solution # 3 Score: 884.0 - GAP: 27.54% - Time: 1808.52s
+
+2024-06-03 08:10:46,363 - INFO - 	 Solution #4
+2024-06-03 08:11:13,378 - INFO - 		 * Constructive method solution score: 836.0
+2024-06-03 08:11:17,896 - INFO - 		 * Local search solution score: 836.0
+2024-06-03 08:41:01,750 - INFO - 		 * ILS solution score: 867.0
+2024-06-03 08:41:01,752 - INFO - 	 Solution # 4 Score: 867.0 - GAP: 28.93% - Time: 1815.39s
+
+2024-06-03 08:41:01,752 - INFO - 	 Solution #5
+2024-06-03 08:41:25,040 - INFO - 		 * Constructive method solution score: 743.0
+2024-06-03 08:41:36,525 - INFO - 		 * Local search solution score: 765.0
+2024-06-03 09:11:14,618 - INFO - 		 * ILS solution score: 852.0
+2024-06-03 09:11:14,620 - INFO - 	 Solution # 5 Score: 852.0 - GAP: 30.16% - Time: 1812.87s
+
+2024-06-03 09:11:14,621 - INFO - 	 - TSV file saved at: .\results\\ITERATED_LOCAL_SEARCH\pr02_cbenefit_insertion_ratio_p3_m5_rTrue.tsv
+
+2024-06-03 09:11:14,621 - INFO - * Parameters: solutions_count=5, path_count=4, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-03 09:11:14,621 - INFO - 	 Solution #1
+2024-06-03 09:11:45,139 - INFO - 		 * Constructive method solution score: 875.0
+2024-06-03 09:12:15,969 - INFO - 		 * Local search solution score: 921.0
+2024-06-03 09:41:25,005 - INFO - 		 * ILS solution score: 993.0
+2024-06-03 09:41:25,007 - INFO - 	 Solution # 1 Score: 993.0 - GAP: 18.61% - Time: 1810.39s
+
+2024-06-03 09:41:25,007 - INFO - 	 Solution #2
+2024-06-03 09:41:56,857 - INFO - 		 * Constructive method solution score: 898.0
+2024-06-03 09:42:09,654 - INFO - 		 * Local search solution score: 926.0
+2024-06-03 10:11:36,672 - INFO - 		 * ILS solution score: 990.0
+2024-06-03 10:11:36,674 - INFO - 	 Solution # 2 Score: 990.0 - GAP: 18.85% - Time: 1811.67s
+
+2024-06-03 10:11:36,674 - INFO - 	 Solution #3
+2024-06-03 10:12:11,411 - INFO - 		 * Constructive method solution score: 937.0
+2024-06-03 10:12:23,244 - INFO - 		 * Local search solution score: 950.0
+2024-06-03 10:41:41,776 - INFO - 		 * ILS solution score: 994.0
+2024-06-03 10:41:41,778 - INFO - 	 Solution # 3 Score: 994.0 - GAP: 18.52% - Time: 1805.10s
+
+2024-06-03 10:41:41,778 - INFO - 	 Solution #4
+2024-06-03 10:42:09,851 - INFO - 		 * Constructive method solution score: 897.0
+2024-06-03 10:42:22,639 - INFO - 		 * Local search solution score: 928.0
+2024-06-03 11:12:01,892 - INFO - 		 * ILS solution score: 978.0
+2024-06-03 11:12:01,893 - INFO - 	 Solution # 4 Score: 978.0 - GAP: 19.84% - Time: 1820.12s
+
+2024-06-03 11:12:01,894 - INFO - 	 Solution #5
+2024-06-03 11:12:32,923 - INFO - 		 * Constructive method solution score: 929.0
+2024-06-03 11:12:56,714 - INFO - 		 * Local search solution score: 985.0
+2024-06-03 11:42:24,680 - INFO - 		 * ILS solution score: 1029.0
+2024-06-03 11:42:24,682 - INFO - 	 Solution # 5 Score: 1029.0 - GAP: 15.66% - Time: 1822.79s
+
+2024-06-03 11:42:24,683 - INFO - 	 - TSV file saved at: .\results\\ITERATED_LOCAL_SEARCH\pr02_cbenefit_insertion_ratio_p4_m5_rTrue.tsv
+

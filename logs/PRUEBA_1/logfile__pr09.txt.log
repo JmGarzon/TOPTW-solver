@@ -1,0 +1,9 @@
+2024-06-06 00:50:13,711 - INFO - Starting TOPTW Solver: ILS Method
+
+
+2024-06-06 00:50:13,715 - INFO - ----------------------------------------
+2024-06-06 00:50:13,715 - INFO - Processing: pr09.txt - N: 216 - T_max: 1000.0
+2024-06-06 00:50:13,715 - INFO - ----------------------------------------
+2024-06-06 00:50:13,715 - INFO - * Parameters: solutions_count=5, path_count=1, criteria=benefit_insertion_ratio, random_noise=True
+2024-06-06 00:50:13,715 - INFO - 	 Solution #1
+2024-06-06 00:50:31,080 - INFO - 		 * Constructive method solution score: 365.0
